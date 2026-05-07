@@ -1,0 +1,16 @@
+es:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d/%m"
+      long: "%d de %B de %Y"
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%d/%m %H:%M"
+      long: "%d de %B de %Y %H:%M"
+  errors:
+    messages:
+      blank: "no puede estar vacío"
+      invalid: "no es válido"
+      taken: "ya está en uso"

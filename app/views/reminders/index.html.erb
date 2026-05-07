@@ -1,0 +1,31 @@
+<% content_for :title, "Recordatorios — Carlitos" %>
+
+<%= render "shared/app_header" %>
+
+<main class="mx-auto max-w-5xl px-5 py-10 sm:px-6 lg:px-8">
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+    <div>
+      <p class="text-sm font-black uppercase text-ocean">Recordatorios</p>
+      <h1 class="mt-2 text-4xl font-black text-ink">Lo que Carlitos tiene presente</h1>
+    </div>
+    <%= link_to "Crear recordatorio", new_reminder_path, class: "rounded-full bg-ocean px-5 py-3 font-extrabold text-white shadow-card" %>
+  </div>
+
+  <section class="mt-8 space-y-4">
+    <% @reminders.each do |reminder| %>
+      <article class="rounded-lg border border-line bg-white/80 p-5 shadow-card">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 class="text-xl font-black text-ink"><%= reminder.title %></h2>
+            <p class="mt-1 text-muted"><%= reminder.body.presence || "Sin detalles" %></p>
+            <p class="mt-2 text-sm font-semibold text-ocean"><%= reminder.remind_at ? l(reminder.remind_at, format: :short) : "Sin fecha" %></p>
+          </div>
+          <%= button_to "Completar", reminder_path(reminder, reminder: { status: "completed" }), method: :patch, class: "rounded-full border border-line bg-white px-4 py-2 text-sm font-bold text-ink" %>
+        </div>
+      </article>
+    <% end %>
+    <% if @reminders.empty? %>
+      <div class="rounded-lg border border-line bg-white/80 p-8 text-muted shadow-card">Todavía no hay recordatorios pendientes.</div>
+    <% end %>
+  </section>
+</main>

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  title: MyString
+  body: MyText
+  remind_at: 2026-05-06 18:01:25
+  recurrence_rule: MyString
+  status: pending
+
+two:
+  user: two
+  title: MyString
+  body: MyText
+  remind_at: 2026-05-06 18:01:25
+  recurrence_rule: MyString
+  status: pending

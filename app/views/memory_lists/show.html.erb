@@ -1,0 +1,27 @@
+<% content_for :title, "#{@memory_list.title} — Carlitos" %>
+
+<%= render "shared/app_header" %>
+
+<main class="mx-auto max-w-4xl px-5 py-10 sm:px-6 lg:px-8">
+  <%= link_to "← Volver a listas", memory_lists_path, class: "text-sm font-black text-ocean" %>
+  <h1 class="mt-4 text-4xl font-black text-ink"><%= @memory_list.title %></h1>
+
+  <section class="mt-8 rounded-lg border border-line bg-white/80 p-6 shadow-card">
+    <%= form_with model: [@memory_list, @memory_list_item], class: "flex flex-col gap-3 sm:flex-row" do |form| %>
+      <%= form.text_field :content, placeholder: "Agregar ítem", class: "min-w-0 flex-1 rounded-lg border border-line bg-cream px-4 py-3" %>
+      <%= form.submit "Agregar", class: "cursor-pointer rounded-full bg-ocean px-6 py-3 font-extrabold text-white" %>
+    <% end %>
+
+    <div class="mt-6 space-y-3">
+      <% @memory_list.memory_list_items.order(created_at: :desc).each do |item| %>
+        <div class="flex items-center justify-between gap-4 rounded-lg bg-cream p-4">
+          <p class="<%= item.completed? ? "text-muted line-through" : "font-semibold text-ink" %>"><%= item.content %></p>
+          <%= button_to(item.completed? ? "Reabrir" : "Completar", memory_list_memory_list_item_path(@memory_list, item, memory_list_item: { completed: !item.completed? }), method: :patch, class: "rounded-full border border-line bg-white px-4 py-2 text-sm font-bold text-ink") %>
+        </div>
+      <% end %>
+      <% if @memory_list.memory_list_items.empty? %>
+        <p class="text-muted">Esta lista todavía no tiene ítems.</p>
+      <% end %>
+    </div>
+  </section>
+</main>

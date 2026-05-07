@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #fbf7ef;
+  --color-ink: #17202a;
+  --color-muted: #5f6f7a;
+  --color-line: #e7ded1;
+  --color-ocean: #157ea0;
+  --color-mint: #2f9d7e;
+  --color-sun: #f3c85b;
+  --shadow-soft: 0 22px 70px rgba(23, 32, 42, 0.11);
+  --shadow-card: 0 14px 40px rgba(23, 32, 42, 0.08);
+}

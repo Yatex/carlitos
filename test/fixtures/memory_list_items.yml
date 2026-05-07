@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  memory_list: one
+  content: MyString
+  completed_at: 2026-05-06 18:01:32
+
+two:
+  memory_list: two
+  content: MyString
+  completed_at: 2026-05-06 18:01:32

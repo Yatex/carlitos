@@ -1,0 +1,30 @@
+<header class="sticky top-0 z-50 border-b border-line/80 bg-cream/90 backdrop-blur-xl">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between gap-5 px-5 py-4 sm:px-6 lg:px-8" aria-label="Principal">
+    <%= link_to root_path, class: "flex items-center gap-3", aria: { label: "Inicio de Carlitos" } do %>
+      <span class="grid h-10 w-10 place-items-center rounded-lg bg-ink text-base font-black text-white shadow-card">C</span>
+      <span class="text-xl font-black text-ink">Carlitos</span>
+    <% end %>
+
+    <div class="hidden items-center gap-7 text-sm lg:flex">
+      <%= nav_link_to "Cómo funciona", root_path(anchor: "como-funciona") %>
+      <%= nav_link_to "Casos de uso", root_path(anchor: "casos") %>
+      <%= nav_link_to "Beneficios", root_path(anchor: "beneficios") %>
+      <%= nav_link_to "Precios", root_path(anchor: "precios") %>
+      <%= nav_link_to "FAQ", root_path(anchor: "faq") %>
+    </div>
+
+    <% if authenticated? %>
+      <%= link_to "Dashboard", dashboard_path, class: "rounded-full bg-ink px-5 py-3 text-sm font-bold text-white shadow-card transition hover:-translate-y-0.5 hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-ocean/20" %>
+    <% else %>
+      <%= link_to "Probar Carlitos", signup_path, class: "rounded-full bg-ink px-5 py-3 text-sm font-bold text-white shadow-card transition hover:-translate-y-0.5 hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-ocean/20" %>
+    <% end %>
+  </nav>
+
+  <div class="no-scrollbar mx-auto flex max-w-7xl gap-5 overflow-x-auto px-5 pb-3 text-sm font-semibold text-muted sm:px-6 lg:hidden lg:px-8">
+    <%= link_to "Cómo funciona", root_path(anchor: "como-funciona"), class: "shrink-0 transition hover:text-ink" %>
+    <%= link_to "Casos de uso", root_path(anchor: "casos"), class: "shrink-0 transition hover:text-ink" %>
+    <%= link_to "Beneficios", root_path(anchor: "beneficios"), class: "shrink-0 transition hover:text-ink" %>
+    <%= link_to "Precios", root_path(anchor: "precios"), class: "shrink-0 transition hover:text-ink" %>
+    <%= link_to "FAQ", root_path(anchor: "faq"), class: "shrink-0 transition hover:text-ink" %>
+  </div>
+</header>

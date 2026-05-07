@@ -1,0 +1,30 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: ana@example.com
+  password_digest: <%= BCrypt::Password.create("password123") %>
+  name: Ana
+  timezone: America/Montevideo
+  role: user
+  subscription_status: free
+  current_plan: free
+
+two:
+  email: bruno@example.com
+  password_digest: <%= BCrypt::Password.create("password123") %>
+  name: Bruno
+  timezone: America/Montevideo
+  role: user
+  stripe_customer_id: cus_test
+  stripe_subscription_id: sub_test
+  subscription_status: active
+  current_plan: pro
+
+admin:
+  email: admin@example.com
+  password_digest: <%= BCrypt::Password.create("password123") %>
+  name: Admin
+  timezone: America/Montevideo
+  role: super_admin
+  subscription_status: active
+  current_plan: pro

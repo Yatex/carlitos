@@ -1,0 +1,41 @@
+<% content_for :title, "Cuenta — Carlitos" %>
+
+<%= render "shared/app_header" %>
+
+<main class="mx-auto max-w-4xl px-5 py-12 sm:px-6 lg:px-8">
+  <h1 class="text-4xl font-black text-ink">Cuenta</h1>
+  <p class="mt-3 text-muted">Ajustes básicos para tu experiencia con Carlitos.</p>
+
+  <section class="mt-8 rounded-lg border border-line bg-white/80 p-6 shadow-card">
+    <%= form_with model: current_user, url: account_path, method: :patch, class: "grid gap-5 md:grid-cols-2" do |form| %>
+      <% if current_user.errors.any? %>
+        <div class="rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-800 md:col-span-2">
+          <%= current_user.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+      <div>
+        <%= form.label :name, "Nombre", class: "block text-sm font-black text-ink" %>
+        <%= form.text_field :name, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+      </div>
+      <div>
+        <%= form.label :email, "Email", class: "block text-sm font-black text-ink" %>
+        <%= form.email_field :email, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+      </div>
+      <div class="md:col-span-2">
+        <%= form.label :timezone, "Zona horaria", class: "block text-sm font-black text-ink" %>
+        <%= form.select :timezone, iana_time_zone_options(current_user.timezone), {}, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+      </div>
+      <div>
+        <%= form.label :password, "Nueva contraseña", class: "block text-sm font-black text-ink" %>
+        <%= form.password_field :password, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+      </div>
+      <div>
+        <%= form.label :password_confirmation, "Confirmar contraseña", class: "block text-sm font-black text-ink" %>
+        <%= form.password_field :password_confirmation, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+      </div>
+      <div class="md:col-span-2">
+        <%= form.submit "Guardar cambios", class: "cursor-pointer rounded-full bg-ocean px-6 py-3 font-extrabold text-white shadow-card transition hover:bg-ink" %>
+      </div>
+    <% end %>
+  </section>
+</main>
