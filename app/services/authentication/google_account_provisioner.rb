@@ -9,8 +9,8 @@ module Authentication
       google_uid = normalized_profile[:sub].to_s.presence
       verified = truthy?(normalized_profile[:email_verified])
 
-      raise ProvisionError, "Google no devolvió un email válido." if email.blank?
-      raise ProvisionError, "Google no confirmó este email todavía." unless verified
+      raise ProvisionError, I18n.t("auth_services.google.invalid_email") if email.blank?
+      raise ProvisionError, I18n.t("auth_services.google.unverified_email") unless verified
 
       user = find_user(email:, google_uid:)
       if user
@@ -31,7 +31,7 @@ module Authentication
 
     def update_google_link!(user, profile, google_uid, verified)
       if user.google_uid.present? && google_uid.present? && user.google_uid != google_uid
-        raise ProvisionError, "Ese email ya está vinculado a otra cuenta de Google."
+        raise ProvisionError, I18n.t("auth_services.google.email_linked")
       end
 
       user.update!(

@@ -1,20 +1,20 @@
-<% content_for :title, "Crear cuenta — Carlitos" %>
+<% content_for :title, t("auth.signup_title") %>
 
 <%= render "shared/public_header" %>
 
 <main class="mx-auto grid min-h-[calc(100vh-80px)] max-w-6xl items-center gap-10 px-5 py-16 sm:px-6 lg:grid-cols-2 lg:px-8">
   <section>
-    <p class="text-sm font-black uppercase text-ocean">Crear cuenta</p>
-    <h1 class="mt-4 text-4xl font-black leading-tight text-ink sm:text-5xl">Empezá a descargar tu memoria diaria.</h1>
-    <p class="mt-5 text-lg leading-8 text-muted">Carlitos guarda recordatorios, listas y notas para devolvértelas cuando importan.</p>
+    <p class="text-sm font-black uppercase text-ocean"><%= t("auth.create_account") %></p>
+    <h1 class="mt-4 text-4xl font-black leading-tight text-ink sm:text-5xl"><%= t("auth.signup_headline") %></h1>
+    <p class="mt-5 text-lg leading-8 text-muted"><%= t("auth.signup_subtitle") %></p>
   </section>
 
   <section class="rounded-lg border border-line bg-white/80 p-6 shadow-soft sm:p-8">
-    <%= render "shared/google_auth_button", intent: "signup", label: "Crear cuenta con Google" %>
+    <%= render "shared/google_auth_button", intent: "signup", label: t("auth.create_account_google") %>
 
     <div class="my-6 flex items-center gap-3 text-xs font-black uppercase text-muted">
       <span class="h-px flex-1 bg-line"></span>
-      <span>o con email</span>
+      <span><%= t("auth.or_email") %></span>
       <span class="h-px flex-1 bg-line"></span>
     </div>
 
@@ -26,15 +26,15 @@
       <% end %>
 
       <div>
-        <%= form.label :name, "Nombre", class: "block text-sm font-black text-ink" %>
+        <%= form.label :name, t("auth.name"), class: "block text-sm font-black text-ink" %>
         <%= form.text_field :name, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-4 outline-none focus:border-ocean focus:ring-4 focus:ring-ocean/10" %>
       </div>
       <div>
-        <%= form.label :email, "Email", class: "block text-sm font-black text-ink" %>
+        <%= form.label :email, t("auth.email"), class: "block text-sm font-black text-ink" %>
         <%= form.email_field :email, required: true, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-4 outline-none focus:border-ocean focus:ring-4 focus:ring-ocean/10" %>
       </div>
       <div>
-        <%= form.label :timezone, "Zona horaria", class: "block text-sm font-black text-ink" %>
+        <%= form.label :timezone, t("auth.timezone"), class: "block text-sm font-black text-ink" %>
         <%= form.select :timezone,
               iana_time_zone_options(@user.timezone),
               {},
@@ -44,19 +44,19 @@
                 timezone_detect_fallback_value: "America/Montevideo",
                 timezone_detect_apply_value: "when-fallback"
               } %>
-        <p class="mt-2 text-sm leading-6 text-muted">La detectamos desde tu navegador, pero podés cambiarla.</p>
+        <p class="mt-2 text-sm leading-6 text-muted"><%= t("auth.timezone_hint") %></p>
       </div>
       <div>
-        <%= form.label :password, "Contraseña", class: "block text-sm font-black text-ink" %>
+        <%= form.label :password, t("auth.password"), class: "block text-sm font-black text-ink" %>
         <%= form.password_field :password, required: true, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-4 outline-none focus:border-ocean focus:ring-4 focus:ring-ocean/10" %>
       </div>
       <div>
-        <%= form.label :password_confirmation, "Confirmar contraseña", class: "block text-sm font-black text-ink" %>
+        <%= form.label :password_confirmation, t("auth.password_confirmation"), class: "block text-sm font-black text-ink" %>
         <%= form.password_field :password_confirmation, required: true, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-4 outline-none focus:border-ocean focus:ring-4 focus:ring-ocean/10" %>
       </div>
 
-      <%= form.submit "Crear cuenta", class: "w-full cursor-pointer rounded-full bg-ocean px-6 py-4 font-extrabold text-white shadow-card transition hover:bg-ink" %>
+      <%= form.submit t("auth.create_account"), class: "w-full cursor-pointer rounded-full bg-ocean px-6 py-4 font-extrabold text-white shadow-card transition hover:bg-ink" %>
     <% end %>
-    <p class="mt-5 text-center text-sm text-muted">¿Ya tenés cuenta? <%= link_to "Iniciar sesión", login_path, class: "font-black text-ocean" %></p>
+    <p class="mt-5 text-center text-sm text-muted"><%= t("auth.already_have_account") %> <%= link_to t("auth.sign_in"), login_path, class: "font-black text-ocean" %></p>
   </section>
 </main>

@@ -1,5 +1,5 @@
 <% intent = local_assigns.fetch(:intent, "login") %>
-<% label = local_assigns.fetch(:label, "Continuar con Google") %>
+<% label = local_assigns.fetch(:label, t("auth.continue_google")) %>
 
 <%= link_to google_auth_path(intent: intent), class: "inline-flex w-full items-center justify-center gap-3 rounded-full border border-line bg-white px-5 py-4 font-extrabold text-ink shadow-card transition hover:border-ocean/40 hover:text-ocean" do %>
   <span class="grid h-6 w-6 place-items-center rounded-full bg-cream text-sm font-black text-ocean">G</span>

@@ -1,36 +1,36 @@
-<% content_for :title, "Billing — Carlitos" %>
+<% content_for :title, t("billing.title") %>
 
 <%= render "shared/app_header" %>
 
 <main class="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
   <section class="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
     <div>
-      <p class="text-sm font-black uppercase text-ocean">Billing</p>
-      <h1 class="mt-2 text-4xl font-black text-ink sm:text-5xl">Elegí cuánto querés que Carlitos recuerde por vos.</h1>
-      <p class="mt-5 max-w-2xl text-lg leading-8 text-muted">Tenés 14 días para probar Carlitos. Después podés pasar a Pro cuando ya sea parte de tu día, o dejar listo Family / Team para coordinar memoria compartida más adelante.</p>
+      <p class="text-sm font-black uppercase text-ocean"><%= t("billing.eyebrow") %></p>
+      <h1 class="mt-2 text-4xl font-black text-ink sm:text-5xl"><%= t("billing.headline") %></h1>
+      <p class="mt-5 max-w-2xl text-lg leading-8 text-muted"><%= t("billing.subtitle") %></p>
     </div>
 
     <article class="rounded-lg border border-line bg-ink p-6 text-white shadow-soft">
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p class="text-sm font-black uppercase text-sun">Plan actual</p>
+          <p class="text-sm font-black uppercase text-sun"><%= t("billing.current_plan") %></p>
           <p class="mt-3 text-4xl font-black"><%= @current_plan.name %></p>
-          <p class="mt-2 text-sm text-white/70">Estado: <%= current_user.subscription_status %></p>
+          <p class="mt-2 text-sm text-white/70"><%= t("billing.status", status: localized_status(current_user.subscription_status)) %></p>
           <% if current_user.free_trial_active? %>
-            <p class="mt-2 text-sm text-white/70">Trial activo: <%= current_user.trial_days_remaining %> días restantes.</p>
+            <p class="mt-2 text-sm text-white/70"><%= t("billing.trial_active", count: current_user.trial_days_remaining) %></p>
           <% elsif current_user.free_trial_expired? %>
-            <p class="mt-2 text-sm text-sun">Tu trial gratis terminó.</p>
+            <p class="mt-2 text-sm text-sun"><%= t("billing.trial_expired") %></p>
           <% elsif current_user.plan_expires_at.present? %>
-            <p class="mt-2 text-sm text-white/70">Acceso hasta <%= l(current_user.plan_expires_at.to_date, format: :default) %>.</p>
+            <p class="mt-2 text-sm text-white/70"><%= t("billing.access_until", date: l(current_user.plan_expires_at.to_date, format: :default)) %></p>
           <% end %>
         </div>
         <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-extrabold"><%= @current_plan.price %></span>
       </div>
 
       <% if current_user.stripe_customer_id.present? %>
-        <%= button_to "Abrir portal de Stripe", stripe_portal_path, method: :post, class: "mt-6 rounded-full bg-white px-5 py-3 font-extrabold text-ink transition hover:bg-sun" %>
+        <%= button_to t("buttons.open_stripe_portal"), stripe_portal_path, method: :post, class: "mt-6 rounded-full bg-white px-5 py-3 font-extrabold text-ink transition hover:bg-sun" %>
       <% else %>
-        <p class="mt-6 text-sm leading-6 text-white/70">El portal de Stripe aparece después del primer checkout. Mientras tanto podés elegir un plan abajo.</p>
+        <p class="mt-6 text-sm leading-6 text-white/70"><%= t("billing.portal_after_checkout") %></p>
       <% end %>
     </article>
   </section>
@@ -45,7 +45,7 @@
             <h2 class="mt-2 text-2xl font-black text-ink"><%= plan.name %></h2>
           </div>
           <% if current %>
-            <span class="rounded-full bg-mint/10 px-3 py-1 text-xs font-black uppercase text-mint">Actual</span>
+            <span class="rounded-full bg-mint/10 px-3 py-1 text-xs font-black uppercase text-mint"><%= t("billing.current") %></span>
           <% end %>
         </div>
 
@@ -74,19 +74,19 @@
 
         <div class="mt-auto pt-7">
           <% if current && current_user.free_trial_expired? %>
-            <span class="inline-flex w-full justify-center rounded-full border border-sun/40 bg-sun/20 px-5 py-3 font-extrabold text-ink">Trial vencido</span>
+            <span class="inline-flex w-full justify-center rounded-full border border-sun/40 bg-sun/20 px-5 py-3 font-extrabold text-ink"><%= t("billing.trial_ended") %></span>
           <% elsif current %>
-            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-ink">Tu plan actual</span>
+            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-ink"><%= t("billing.your_current_plan") %></span>
           <% elsif plan.configured_for_checkout? %>
-            <%= button_to "Elegir #{plan.name}", stripe_checkout_path(plan: plan.key), method: :post, class: "w-full rounded-full bg-ocean px-5 py-3 font-extrabold text-white shadow-card transition hover:bg-ink" %>
+            <%= button_to t("buttons.choose_plan", plan: plan.name), stripe_checkout_path(plan: plan.key), method: :post, class: "w-full rounded-full bg-ocean px-5 py-3 font-extrabold text-white shadow-card transition hover:bg-ink" %>
           <% elsif plan.checkoutable? %>
-            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 text-center font-extrabold text-muted"><%= plan.stripe_price_env %> pendiente</span>
+            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 text-center font-extrabold text-muted"><%= t("billing.price_pending", env: plan.stripe_price_env) %></span>
           <% elsif plan.coming_soon %>
-            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-muted">Unirme a la lista</span>
+            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-muted"><%= t("billing.join_waitlist") %></span>
           <% elsif plan.key == "free" %>
-            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-muted">Trial inicial</span>
+            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-muted"><%= t("billing.trial_initial") %></span>
           <% else %>
-            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-ink">Incluido</span>
+            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-ink"><%= t("billing.included") %></span>
           <% end %>
         </div>
       </article>
@@ -94,21 +94,21 @@
   </section>
 
   <section class="mt-10 rounded-lg border border-line bg-white/70 p-6 shadow-card">
-    <h2 class="text-2xl font-black text-ink">Cómo se desbloquean funciones</h2>
+    <h2 class="text-2xl font-black text-ink"><%= t("billing.unlock_heading") %></h2>
     <div class="mt-5 grid gap-4 md:grid-cols-3">
       <div class="rounded-lg bg-cream p-4">
-        <p class="font-black text-ink">Free</p>
-        <p class="mt-2 text-sm leading-6 text-muted">Es una prueba automática de 14 días para probar captura rápida, listas simples y recordatorios puntuales.</p>
+        <p class="font-black text-ink"><%= Billing::PlanCatalog.find!("free").name %></p>
+        <p class="mt-2 text-sm leading-6 text-muted"><%= t("billing.free_unlock") %></p>
       </div>
       <div class="rounded-lg bg-ocean/10 p-4">
-        <p class="font-black text-ink">Pro</p>
-        <p class="mt-2 text-sm leading-6 text-muted">Activa memoria buscable, notas de voz, briefing diario e integraciones útiles.</p>
+        <p class="font-black text-ink"><%= Billing::PlanCatalog.find!("pro").name %></p>
+        <p class="mt-2 text-sm leading-6 text-muted"><%= t("billing.pro_unlock") %></p>
       </div>
       <div class="rounded-lg bg-sun/20 p-4">
-        <p class="font-black text-ink">Family / Team</p>
-        <p class="mt-2 text-sm leading-6 text-muted">Preparado para listas, recordatorios y contexto compartido cuando esté disponible.</p>
+        <p class="font-black text-ink"><%= Billing::PlanCatalog.find!("family").name %></p>
+        <p class="mt-2 text-sm leading-6 text-muted"><%= t("billing.family_unlock") %></p>
       </div>
     </div>
-    <p class="mt-5 text-sm text-muted">Stripe Checkout usa variables de entorno para los Price IDs. No hay precios reales ni credenciales hardcodeadas en el código.</p>
+    <p class="mt-5 text-sm text-muted"><%= t("billing.stripe_note") %></p>
   </section>
 </main>

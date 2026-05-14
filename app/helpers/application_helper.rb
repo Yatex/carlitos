@@ -1,13 +1,10 @@
 module ApplicationHelper
-  DEFAULT_TITLE = "Carlitos — Tu asistente de memoria por WhatsApp".freeze
-  DEFAULT_DESCRIPTION = "Carlitos te ayuda a guardar recordatorios, tareas, listas e ideas desde WhatsApp para liberar tu cabeza y mantener todo bajo control.".freeze
-
   def page_title
-    content_for?(:title) ? content_for(:title) : DEFAULT_TITLE
+    content_for?(:title) ? content_for(:title) : t("meta.title")
   end
 
   def page_description
-    content_for?(:description) ? content_for(:description) : DEFAULT_DESCRIPTION
+    content_for?(:description) ? content_for(:description) : t("meta.description")
   end
 
   def nav_link_to(label, path, options = {})
@@ -22,5 +19,29 @@ module ApplicationHelper
     end
 
     options_for_select(zones, selected.presence || "America/Montevideo")
+  end
+
+  def language_switch_path(locale)
+    url_for(params: request.query_parameters.merge(locale: locale), only_path: true)
+  end
+
+  def localized_status(status)
+    t("statuses.subscription.#{status}", default: status.to_s.humanize)
+  end
+
+  def localized_integration_status(status)
+    t("statuses.integration.#{status}", default: status.to_s.humanize)
+  end
+
+  def localized_role(role)
+    t("statuses.role.#{role}", default: role.to_s.humanize)
+  end
+
+  def localized_assistant_channel(channel)
+    t("statuses.assistant_channel.#{channel}", default: channel.to_s.humanize)
+  end
+
+  def localized_assistant_direction(direction)
+    t("statuses.assistant_direction.#{direction}", default: direction.to_s.humanize)
   end
 end

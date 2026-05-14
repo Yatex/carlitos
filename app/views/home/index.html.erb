@@ -1,5 +1,6 @@
-<% content_for :title, "Carlitos — Tu asistente de memoria por WhatsApp" %>
-<% content_for :description, "Carlitos te ayuda a guardar recordatorios, tareas, listas e ideas desde WhatsApp para liberar tu cabeza y mantener todo bajo control." %>
+<% content_for :title, t("landing.title") %>
+<% content_for :description, t("landing.description") %>
+<% pricing_plans = Billing::PlanCatalog.all.index_by(&:key) %>
 
 <%= render "shared/public_header" %>
 
@@ -9,80 +10,74 @@
       <div>
         <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-white/70 px-4 py-2 text-sm font-semibold text-muted shadow-card">
           <span class="h-2 w-2 rounded-full bg-mint"></span>
-          Memoria diaria, sin abrir otra app
+          <%= t("landing.hero_badge") %>
         </div>
         <h1 class="max-w-3xl text-5xl font-black leading-[1.02] text-ink sm:text-6xl lg:text-7xl">
-          Carlitos se acuerda por vos.
+          <%= t("landing.hero_headline") %>
         </h1>
         <p class="mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl">
-          Tu asistente de memoria por WhatsApp: guarda recordatorios, tareas, listas e ideas, y te avisa cuando realmente importa.
+          <%= t("landing.hero_subheadline") %>
         </p>
         <div class="mt-9 flex flex-col gap-3 sm:flex-row">
-          <%= link_to "Empezar ahora", signup_path, class: "inline-flex items-center justify-center rounded-full bg-ocean px-7 py-4 text-base font-extrabold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-ink focus:outline-none focus:ring-4 focus:ring-ocean/20" %>
-          <%= link_to "Ver cómo funciona", "#como-funciona", class: "inline-flex items-center justify-center rounded-full border border-line bg-white/80 px-7 py-4 text-base font-extrabold text-ink shadow-card transition hover:-translate-y-0.5 hover:border-ocean/40 hover:text-ocean focus:outline-none focus:ring-4 focus:ring-ocean/10" %>
+          <%= link_to t("landing.primary_cta"), signup_path, class: "inline-flex items-center justify-center rounded-full bg-ocean px-7 py-4 text-base font-extrabold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-ink focus:outline-none focus:ring-4 focus:ring-ocean/20" %>
+          <%= link_to t("landing.secondary_cta"), "#como-funciona", class: "inline-flex items-center justify-center rounded-full border border-line bg-white/80 px-7 py-4 text-base font-extrabold text-ink shadow-card transition hover:-translate-y-0.5 hover:border-ocean/40 hover:text-ocean focus:outline-none focus:ring-4 focus:ring-ocean/10" %>
         </div>
         <div class="mt-10 grid max-w-xl grid-cols-1 gap-3 text-sm text-muted sm:grid-cols-3">
-          <div class="rounded-lg border border-line bg-white/65 p-4">
-            <strong class="block text-2xl text-ink">30s</strong>
-            para capturar una idea
-          </div>
-          <div class="rounded-lg border border-line bg-white/65 p-4">
-            <strong class="block text-2xl text-ink">24/7</strong>
-            memoria disponible
-          </div>
-          <div class="rounded-lg border border-line bg-white/65 p-4">
-            <strong class="block text-2xl text-ink">0</strong>
-            tableros que mantener
-          </div>
+          <% t("landing.stats").each do |value, label| %>
+            <div class="rounded-lg border border-line bg-white/65 p-4">
+              <strong class="block text-2xl text-ink"><%= value %></strong>
+              <%= label %>
+            </div>
+          <% end %>
         </div>
       </div>
 
       <div class="relative">
         <div class="relative grid gap-4 rounded-lg border border-line bg-white/75 p-4 shadow-soft backdrop-blur sm:grid-cols-2 sm:p-5">
-          <section aria-label="Ejemplos de mensajes por WhatsApp" class="rounded-lg bg-[#eef7f2] p-4">
+          <section aria-label="<%= t("landing.chat_aria") %>" class="rounded-lg bg-[#eef7f2] p-4">
             <div class="mb-4 flex items-center gap-3 border-b border-mint/15 pb-3">
               <div class="grid h-10 w-10 place-items-center rounded-full bg-mint text-sm font-black text-white">C</div>
               <div>
                 <p class="text-sm font-black text-ink">Carlitos</p>
-                <p class="text-xs font-semibold text-mint">en WhatsApp</p>
+                <p class="text-xs font-semibold text-mint"><%= t("landing.chat_label") %></p>
               </div>
             </div>
             <div class="space-y-4">
               <div class="chat-bubble max-w-[92%] rounded-lg bg-white p-4 text-sm font-medium leading-6 text-ink shadow-card">
-                Carlitos, recordame pagar el alquiler el viernes a las 10
+                <%= t("landing.chat_1") %>
               </div>
               <div class="chat-bubble ml-auto max-w-[94%] rounded-lg bg-[#d9f5e8] p-4 text-sm font-medium leading-6 text-ink shadow-card">
-                Listo. Te aviso el viernes a las 10:00.
+                <%= t("landing.assistant_reply") %>
               </div>
               <div class="chat-bubble max-w-[92%] rounded-lg bg-white p-4 text-sm font-medium leading-6 text-ink shadow-card">
-                Agregá leche, café y huevos a la lista del súper
+                <%= t("landing.chat_2") %>
               </div>
               <div class="chat-bubble max-w-[92%] rounded-lg bg-white p-4 text-sm font-medium leading-6 text-ink shadow-card">
-                Mañana haceme un resumen de lo importante
+                <%= t("landing.chat_3") %>
               </div>
             </div>
           </section>
 
-          <section aria-label="Información organizada por Carlitos" class="space-y-3 rounded-lg bg-ink p-4 text-white">
+          <section aria-label="<%= t("landing.organized_aria") %>" class="space-y-3 rounded-lg bg-ink p-4 text-white">
             <article class="rounded-lg bg-white/10 p-4 ring-1 ring-white/10">
-              <p class="text-xs font-bold uppercase text-sun">Recordatorio creado</p>
-              <h2 class="mt-1 text-base font-black">Alquiler</h2>
-              <p class="mt-2 text-sm leading-6 text-white/72">Viernes, 10:00 · Aviso tranquilo por WhatsApp</p>
+              <p class="text-xs font-bold uppercase text-sun"><%= t("landing.reminder_created") %></p>
+              <h2 class="mt-1 text-base font-black"><%= t("landing.reminder_title") %></h2>
+              <p class="mt-2 text-sm leading-6 text-white/72"><%= t("landing.reminder_created_detail") %></p>
             </article>
             <article class="rounded-lg bg-white/10 p-4 ring-1 ring-white/10">
-              <p class="text-xs font-bold uppercase text-[#8de0c3]">Lista actualizada</p>
-              <h2 class="mt-1 text-base font-black">Súper</h2>
-              <p class="mt-2 text-sm leading-6 text-white/72">Leche · Café · Huevos</p>
+              <p class="text-xs font-bold uppercase text-[#8de0c3]"><%= t("landing.list_updated") %></p>
+              <h2 class="mt-1 text-base font-black"><%= t("landing.grocery_title") %></h2>
+              <p class="mt-2 text-sm leading-6 text-white/72"><%= t("landing.grocery_detail") %></p>
             </article>
             <article class="rounded-lg bg-white/10 p-4 ring-1 ring-white/10">
-              <p class="text-xs font-bold uppercase text-[#92d8ef]">Briefing programado</p>
-              <h2 class="mt-1 text-base font-black">Resumen de mañana</h2>
-              <p class="mt-2 text-sm leading-6 text-white/72">Tareas, agenda y pendientes importantes.</p>
+              <p class="text-xs font-bold uppercase text-[#92d8ef]"><%= t("landing.daily_briefing_scheduled") %></p>
+              <h2 class="mt-1 text-base font-black"><%= t("landing.briefing_title") %></h2>
+              <p class="mt-2 text-sm leading-6 text-white/72"><%= t("landing.briefing_detail") %></p>
             </article>
             <article class="rounded-lg bg-white/10 p-4 ring-1 ring-white/10">
-              <p class="text-xs font-bold uppercase text-sun">Contexto guardado</p>
-              <h2 class="mt-1 text-base font-black">Datos para después</h2>
-              <p class="mt-2 text-sm leading-6 text-white/72">Nombres, links, preferencias y compromisos.</p>
+              <p class="text-xs font-bold uppercase text-sun"><%= t("landing.context_saved") %></p>
+              <h2 class="mt-1 text-base font-black"><%= t("landing.context_title") %></h2>
+              <p class="mt-2 text-sm leading-6 text-white/72"><%= t("landing.context_detail") %></p>
             </article>
           </section>
         </div>
@@ -93,30 +88,22 @@
   <section class="border-y border-line bg-white/55 py-20">
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
       <div class="max-w-3xl">
-        <p class="text-sm font-black uppercase text-ocean">El problema</p>
+        <p class="text-sm font-black uppercase text-ocean"><%= t("landing.problem_eyebrow") %></p>
         <h2 class="mt-4 text-3xl font-black leading-tight text-ink sm:text-5xl">
-          No estás olvidando porque sos desordenado. Estás intentando recordar demasiado.
+          <%= t("landing.problem_headline") %>
         </h2>
         <p class="mt-5 text-lg leading-8 text-muted">
-          La información vive repartida entre chats, notas, calendario, mails, audios y memoria. Carlitos te da un lugar simple para mandar lo que aparece y confiar en que vuelve en el momento correcto.
+          <%= t("landing.problem_copy") %>
         </p>
       </div>
       <div class="mt-12 grid gap-5 md:grid-cols-3">
-        <article class="rounded-lg border border-line bg-cream p-6 shadow-card">
-          <div class="mb-5 grid h-12 w-12 place-items-center rounded-lg bg-sun/30 text-xl font-black text-ink">1</div>
-          <h3 class="text-xl font-black text-ink">Me acuerdo tarde</h3>
-          <p class="mt-3 leading-7 text-muted">Ese pago, turno o follow-up aparece en tu cabeza cuando ya pasó el momento útil.</p>
-        </article>
-        <article class="rounded-lg border border-line bg-cream p-6 shadow-card">
-          <div class="mb-5 grid h-12 w-12 place-items-center rounded-lg bg-mint/18 text-xl font-black text-ink">2</div>
-          <h3 class="text-xl font-black text-ink">Tengo mil cosas sueltas</h3>
-          <p class="mt-3 leading-7 text-muted">Ideas, compras, promesas, links y tareas quedan desperdigadas en lugares distintos.</p>
-        </article>
-        <article class="rounded-lg border border-line bg-cream p-6 shadow-card">
-          <div class="mb-5 grid h-12 w-12 place-items-center rounded-lg bg-ocean/15 text-xl font-black text-ink">3</div>
-          <h3 class="text-xl font-black text-ink">No quiero abrir otra app</h3>
-          <p class="mt-3 leading-7 text-muted">Cuando la herramienta exige demasiados pasos, termina siendo otra cosa que también hay que recordar.</p>
-        </article>
+        <% [[t("landing.pain_1_title"), t("landing.pain_1_copy"), "bg-sun/30"], [t("landing.pain_2_title"), t("landing.pain_2_copy"), "bg-mint/18"], [t("landing.pain_3_title"), t("landing.pain_3_copy"), "bg-ocean/15"]].each_with_index do |(title, copy, tone), index| %>
+          <article class="rounded-lg border border-line bg-cream p-6 shadow-card">
+            <div class="mb-5 grid h-12 w-12 place-items-center rounded-lg <%= tone %> text-xl font-black text-ink"><%= index + 1 %></div>
+            <h3 class="text-xl font-black text-ink"><%= title %></h3>
+            <p class="mt-3 leading-7 text-muted"><%= copy %></p>
+          </article>
+        <% end %>
       </div>
     </div>
   </section>
@@ -124,27 +111,19 @@
   <section id="como-funciona" class="py-20 sm:py-24">
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="text-sm font-black uppercase text-ocean">Cómo funciona</p>
+        <p class="text-sm font-black uppercase text-ocean"><%= t("landing.how_eyebrow") %></p>
         <h2 class="mt-4 text-3xl font-black leading-tight text-ink sm:text-5xl">
-          Mandás un mensaje. Carlitos lo ordena.
+          <%= t("landing.how_headline") %>
         </h2>
       </div>
       <div class="mt-14 grid gap-5 lg:grid-cols-3">
-        <article class="rounded-lg border border-line bg-white/78 p-7 shadow-card">
-          <span class="text-sm font-black text-ocean">01</span>
-          <h3 class="mt-4 text-2xl font-black text-ink">Capturá</h3>
-          <p class="mt-3 leading-7 text-muted">Enviá un texto, audio, mensaje reenviado, idea, tarea o recordatorio apenas aparece.</p>
-        </article>
-        <article class="rounded-lg border border-line bg-white/78 p-7 shadow-card">
-          <span class="text-sm font-black text-ocean">02</span>
-          <h3 class="mt-4 text-2xl font-black text-ink">Ordená</h3>
-          <p class="mt-3 leading-7 text-muted">Carlitos entiende si es una tarea, lista, nota, evento, recordatorio o contexto personal.</p>
-        </article>
-        <article class="rounded-lg border border-line bg-white/78 p-7 shadow-card">
-          <span class="text-sm font-black text-ocean">03</span>
-          <h3 class="mt-4 text-2xl font-black text-ink">Recordá</h3>
-          <p class="mt-3 leading-7 text-muted">Te lo trae de vuelta por WhatsApp, email, notificaciones o briefing diario cuando hace falta.</p>
-        </article>
+        <% [[t("landing.capture_title"), t("landing.capture_copy")], [t("landing.organize_title"), t("landing.organize_copy")], [t("landing.remind_title"), t("landing.remind_copy")]].each_with_index do |(title, copy), index| %>
+          <article class="rounded-lg border border-line bg-white/78 p-7 shadow-card">
+            <span class="text-sm font-black text-ocean"><%= "%02d" % (index + 1) %></span>
+            <h3 class="mt-4 text-2xl font-black text-ink"><%= title %></h3>
+            <p class="mt-3 leading-7 text-muted"><%= copy %></p>
+          </article>
+        <% end %>
       </div>
     </div>
   </section>
@@ -153,26 +132,17 @@
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
       <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
         <div class="max-w-3xl">
-          <p class="text-sm font-black uppercase text-mint">Funciones</p>
+          <p class="text-sm font-black uppercase text-mint"><%= t("landing.features_eyebrow") %></p>
           <h2 class="mt-4 text-3xl font-black leading-tight text-ink sm:text-5xl">
-            Una memoria externa para tu día a día.
+            <%= t("landing.features_headline") %>
           </h2>
         </div>
         <p class="max-w-xl text-lg leading-8 text-muted">
-          Captura rápida, orden inteligente y recordatorios calmos para que tu cabeza no tenga que cargar con todo.
+          <%= t("landing.features_copy") %>
         </p>
       </div>
       <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <% [
-          ["Recordatorios inteligentes", "Recordatorios únicos o recurrentes usando lenguaje natural."],
-          ["Listas que se actualizan", "Súper, viajes, trabajo, familia, ideas y listas personales."],
-          ["Briefing diario", "Recibí cada mañana un resumen simple de lo que importa hoy."],
-          ["Captura de audios", "Mandá una nota de voz y Carlitos la convierte en información ordenada."],
-          ["Contexto personal", "Guardá preferencias, links, nombres, instrucciones y compromisos."],
-          ["Asistencia con calendario", "Conexión opcional para ayudarte con reuniones y horarios."],
-          ["Follow-ups", "Recordá responder, cerrar pendientes o volver sobre una conversación."],
-          ["Buscá tu memoria", "Preguntá qué restaurante recomendaron o qué faltaba comprar."]
-        ].each do |title, body| %>
+        <% t("landing.features").each do |title, body| %>
           <article class="rounded-lg border border-line bg-white p-6 shadow-card">
             <h3 class="text-lg font-black text-ink"><%= title %></h3>
             <p class="mt-3 leading-7 text-muted"><%= body %></p>
@@ -185,19 +155,13 @@
   <section id="casos" class="py-20 sm:py-24">
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="text-sm font-black uppercase text-ocean">Casos de uso</p>
+        <p class="text-sm font-black uppercase text-ocean"><%= t("landing.use_cases_eyebrow") %></p>
         <h2 class="mt-4 text-3xl font-black leading-tight text-ink sm:text-5xl">
-          Para trabajo, familia, estudio y vida personal.
+          <%= t("landing.use_cases_headline") %>
         </h2>
       </div>
       <div class="no-scrollbar mt-12 flex gap-4 overflow-x-auto pb-3 lg:grid lg:grid-cols-5 lg:overflow-visible">
-        <% [
-          ["Profesionales", "Reuniones y pendientes", "Follow-ups, clientes, entregas, fechas límite y notas rápidas entre reuniones."],
-          ["Familias", "Lo que no puede faltar", "Tareas del colegio, compras, turnos médicos y recordatorios compartidos."],
-          ["Founders", "Ideas y seguimiento", "Ideas de producto, inversores, tareas de equipo y contexto que cambia rápido."],
-          ["Estudiantes", "Estudio en orden", "Exámenes, entregas, resúmenes, lecturas y recordatorios de práctica."],
-          ["Vida personal", "Detalles cotidianos", "Cumpleaños, rutinas, hábitos, trámites, salud y pequeñas promesas."]
-        ].each do |label, title, body| %>
+        <% t("landing.use_cases").each do |label, title, body| %>
           <article class="min-w-[16rem] rounded-lg border border-line bg-white/80 p-6 shadow-card">
             <p class="mb-4 text-sm font-black text-ocean"><%= label %></p>
             <h3 class="text-xl font-black text-ink"><%= title %></h3>
@@ -211,20 +175,20 @@
   <section class="border-y border-line bg-ink py-20 text-white sm:py-24">
     <div class="mx-auto grid max-w-7xl gap-10 px-5 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
       <div>
-        <p class="text-sm font-black uppercase text-sun">Principios</p>
+        <p class="text-sm font-black uppercase text-sun"><%= t("landing.clarity_eyebrow") %></p>
         <h2 class="mt-4 text-3xl font-black leading-tight sm:text-5xl">
-          Menos ruido. Más claridad.
+          <%= t("landing.clarity_headline") %>
         </h2>
         <p class="mt-5 text-lg leading-8 text-white/70">
-          Carlitos está pensado para bajar la carga mental, no para darte otro tablero que tengas que revisar todo el día.
+          <%= t("landing.clarity_copy") %>
         </p>
       </div>
       <div class="grid gap-4 sm:grid-cols-2">
-        <% ["WhatsApp-first", "Sin configuración compleja", "Captura rápida", "Recordatorios calmos", "Resumen diario claro", "Privacidad primero"].each do |principle| %>
+        <% t("landing.principles").each do |principle| %>
           <div class="rounded-lg bg-white/8 p-5 ring-1 ring-white/10"><%= principle %></div>
         <% end %>
         <div class="rounded-lg bg-white/8 p-5 ring-1 ring-white/10 sm:col-span-2">
-          Construido para reducir carga mental, no para crear más mantenimiento.
+          <%= t("landing.clarity_footer") %>
         </div>
       </div>
     </div>
@@ -233,24 +197,18 @@
   <section class="py-20 sm:py-24">
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="text-sm font-black uppercase text-mint">Early access</p>
+        <p class="text-sm font-black uppercase text-mint"><%= t("early_access.title") %></p>
         <h2 class="mt-4 text-3xl font-black leading-tight text-ink sm:text-5xl">
-          Diseñado para personas con demasiadas cosas en la cabeza.
+          <%= t("landing.trust_1_title") %>
         </h2>
       </div>
       <div class="mt-12 grid gap-5 md:grid-cols-3">
-        <article class="rounded-lg border border-line bg-white/78 p-7 shadow-card">
-          <p class="text-xl font-black text-ink">Usarlo en segundos</p>
-          <p class="mt-3 leading-7 text-muted">Pensado para capturar algo rápido, incluso en medio de un día cargado.</p>
-        </article>
-        <article class="rounded-lg border border-line bg-white/78 p-7 shadow-card">
-          <p class="text-xl font-black text-ink">Simple por fuera</p>
-          <p class="mt-3 leading-7 text-muted">La experiencia principal es mandar un mensaje y recibir ayuda concreta.</p>
-        </article>
-        <article class="rounded-lg border border-line bg-white/78 p-7 shadow-card">
-          <p class="text-xl font-black text-ink">Inteligente por dentro</p>
-          <p class="mt-3 leading-7 text-muted">Carlitos ordena lo que recibe para que puedas recuperarlo después.</p>
-        </article>
+        <% [[t("landing.trust_1_title"), t("landing.trust_1_copy")], [t("landing.trust_2_title"), t("landing.trust_2_copy")], [t("landing.trust_3_title"), t("landing.trust_3_copy")]].each do |title, copy| %>
+          <article class="rounded-lg border border-line bg-white/78 p-7 shadow-card">
+            <p class="text-xl font-black text-ink"><%= title %></p>
+            <p class="mt-3 leading-7 text-muted"><%= copy %></p>
+          </article>
+        <% end %>
       </div>
     </div>
   </section>
@@ -258,53 +216,55 @@
   <section id="precios" class="border-y border-line bg-white/55 py-20 sm:py-24">
     <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="text-sm font-black uppercase text-ocean">Precios</p>
+        <p class="text-sm font-black uppercase text-ocean"><%= t("landing.pricing_eyebrow") %></p>
         <h2 class="mt-4 text-3xl font-black leading-tight text-ink sm:text-5xl">
-          Empezá simple. Sumá más memoria cuando la necesites.
+          <%= t("landing.pricing_headline") %>
         </h2>
       </div>
       <div class="mt-12 grid gap-6 lg:grid-cols-3">
         <article class="rounded-lg border border-line bg-cream p-7 shadow-card">
-          <h3 class="text-2xl font-black text-ink">Free trial</h3>
-          <p class="mt-4 text-5xl font-black text-ink">14 días</p>
+          <% free_plan = pricing_plans.fetch("free") %>
+          <h3 class="text-2xl font-black text-ink"><%= free_plan.name %></h3>
+          <p class="mt-4 text-5xl font-black text-ink"><%= free_plan.price %></p>
           <ul class="mt-7 space-y-3 leading-7 text-muted">
-            <li>Recordatorios básicos</li>
-            <li>Listas básicas</li>
-            <li>Mensajes mensuales limitados</li>
-            <li>Acceso por WhatsApp</li>
+            <% free_plan.features.first(4).each do |feature| %>
+              <li><%= feature %></li>
+            <% end %>
           </ul>
-          <%= link_to "Activar prueba", signup_path, class: "mt-8 inline-flex w-full justify-center rounded-full border border-line bg-white px-5 py-3 font-extrabold text-ink transition hover:border-ocean/40 hover:text-ocean" %>
+          <%= link_to t("landing.activate_trial"), signup_path, class: "mt-8 inline-flex w-full justify-center rounded-full border border-line bg-white px-5 py-3 font-extrabold text-ink transition hover:border-ocean/40 hover:text-ocean" %>
         </article>
 
         <article class="relative rounded-lg border-2 border-ocean bg-ink p-7 text-white shadow-soft">
-          <span class="absolute right-6 top-6 rounded-full bg-sun px-3 py-1 text-xs font-black uppercase text-ink">Recomendado</span>
-          <h3 class="text-2xl font-black">Pro</h3>
-          <p class="mt-4 text-5xl font-black">USD 9<span class="text-base font-bold text-white/60">/month</span></p>
+          <% pro_plan = pricing_plans.fetch("pro") %>
+          <span class="absolute right-6 top-6 rounded-full bg-sun px-3 py-1 text-xs font-black uppercase text-ink"><%= pro_plan.badge %></span>
+          <h3 class="text-2xl font-black"><%= pro_plan.name %></h3>
+          <p class="mt-4 text-5xl font-black"><%= pro_plan.price %></p>
           <ul class="mt-7 space-y-3 leading-7 text-white/72">
-            <li>Recordatorios ilimitados</li>
-            <li>Listas ilimitadas</li>
-            <li>Briefing diario</li>
-            <li>Notas de voz</li>
-            <li>Búsqueda en tu memoria</li>
-            <li>Integración con calendario</li>
+            <% pro_plan.features.first(7).each do |feature| %>
+              <li><%= feature %></li>
+            <% end %>
           </ul>
           <% if authenticated? %>
-            <%= button_to "Probar Pro", stripe_checkout_path(plan: "pro"), method: :post, class: "mt-8 w-full rounded-full bg-ocean px-5 py-3 font-extrabold text-white transition hover:bg-white hover:text-ink" %>
+            <%= button_to t("landing.try_pro"), stripe_checkout_path(plan: "pro"), method: :post, class: "mt-8 w-full rounded-full bg-ocean px-5 py-3 font-extrabold text-white transition hover:bg-white hover:text-ink" %>
           <% else %>
-            <%= link_to "Probar Pro", signup_path, class: "mt-8 inline-flex w-full justify-center rounded-full bg-ocean px-5 py-3 font-extrabold text-white transition hover:bg-white hover:text-ink" %>
+            <%= link_to t("landing.try_pro"), signup_path, class: "mt-8 inline-flex w-full justify-center rounded-full bg-ocean px-5 py-3 font-extrabold text-white transition hover:bg-white hover:text-ink" %>
           <% end %>
         </article>
 
         <article class="rounded-lg border border-line bg-cream p-7 shadow-card">
-          <h3 class="text-2xl font-black text-ink">Family / Team</h3>
-          <p class="mt-4 text-4xl font-black text-ink">Próximamente</p>
+          <% family_plan = pricing_plans.fetch("family") %>
+          <h3 class="text-2xl font-black text-ink"><%= family_plan.name %></h3>
+          <p class="mt-4 text-4xl font-black text-ink"><%= family_plan.price %></p>
           <ul class="mt-7 space-y-3 leading-7 text-muted">
-            <li>Listas compartidas</li>
-            <li>Recordatorios compartidos</li>
-            <li>Múltiples integrantes</li>
-            <li>Controles de administración</li>
+            <% family_plan.features.first(4).each do |feature| %>
+              <li><%= feature %></li>
+            <% end %>
           </ul>
-          <%= link_to "Unirme a la lista", "#early-access", class: "mt-8 inline-flex w-full justify-center rounded-full border border-line bg-white px-5 py-3 font-extrabold text-ink transition hover:border-ocean/40 hover:text-ocean" %>
+          <% if authenticated? %>
+            <%= button_to t("landing.try_family"), stripe_checkout_path(plan: "family"), method: :post, class: "mt-8 w-full rounded-full border border-line bg-white px-5 py-3 font-extrabold text-ink transition hover:border-ocean/40 hover:text-ocean" %>
+          <% else %>
+            <%= link_to t("landing.try_family"), signup_path, class: "mt-8 inline-flex w-full justify-center rounded-full border border-line bg-white px-5 py-3 font-extrabold text-ink transition hover:border-ocean/40 hover:text-ocean" %>
+          <% end %>
         </article>
       </div>
     </div>
@@ -313,22 +273,13 @@
   <section id="faq" class="py-20 sm:py-24">
     <div class="mx-auto grid max-w-7xl gap-10 px-5 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
       <div>
-        <p class="text-sm font-black uppercase text-ocean">FAQ</p>
+        <p class="text-sm font-black uppercase text-ocean"><%= t("landing.faq_eyebrow") %></p>
         <h2 class="mt-4 text-3xl font-black leading-tight text-ink sm:text-5xl">
-          Preguntas frecuentes.
+          <%= t("landing.faq_headline") %>
         </h2>
       </div>
       <div class="space-y-4">
-        <% [
-          ["¿Necesito instalar otra app?", "No para empezar. La idea es que puedas usar Carlitos desde WhatsApp, donde ya estás."],
-          ["¿Puedo usarlo desde WhatsApp?", "Sí. Carlitos está pensado con WhatsApp como canal principal para capturar y recibir recordatorios."],
-          ["¿Carlitos puede entender notas de voz?", "Sí. Podés mandar audios para convertir ideas, tareas o recordatorios en información estructurada."],
-          ["¿Puede conectarse con mi calendario?", "La conexión con calendario es opcional y está pensada para mejorar reuniones, horarios y avisos importantes."],
-          ["¿Qué pasa con mis datos?", "Carlitos se diseña con privacidad primero. Tus datos deben usarse para ayudarte a recordar, no para agregar ruido."],
-          ["¿Puedo cancelar cuando quiera?", "Sí. Cuando haya suscripción activa, vas a poder cancelarla sin pasos raros."],
-          ["¿Es para trabajo o vida personal?", "Para ambos. Carlitos sirve para trabajo, familia, estudio, compras, hábitos, ideas y pendientes personales."],
-          ["¿Qué hace diferente a Carlitos de una app de notas?", "No tenés que ordenar todo manualmente ni volver a buscarlo por tu cuenta. Carlitos captura rápido, entiende el contexto y te lo trae cuando importa."]
-        ].each_with_index do |(question, answer), index| %>
+        <% t("landing.faqs").each_with_index do |(question, answer), index| %>
           <details class="group rounded-lg border border-line bg-white/78 p-5 shadow-card" <%= "open" if index.zero? %>>
             <summary class="cursor-pointer list-none text-lg font-black text-ink"><%= question %></summary>
             <p class="mt-3 leading-7 text-muted"><%= answer %></p>
@@ -341,14 +292,14 @@
   <section id="early-access" class="px-5 pb-20 sm:px-6 sm:pb-24 lg:px-8">
     <div class="mx-auto grid max-w-7xl overflow-hidden rounded-lg border border-line bg-ink shadow-soft lg:grid-cols-[1fr_0.9fr]">
       <div class="p-8 text-white sm:p-12 lg:p-16">
-        <p class="text-sm font-black uppercase text-sun">Acceso anticipado</p>
+        <p class="text-sm font-black uppercase text-sun"><%= t("early_access.title") %></p>
         <h2 class="mt-4 max-w-2xl text-4xl font-black leading-tight sm:text-6xl">
-          Dejá de cargar todo en tu cabeza.
+          <%= t("landing.final_headline") %>
         </h2>
         <p class="mt-5 max-w-xl text-lg leading-8 text-white/72">
-          Mandale un mensaje a Carlitos y recuperá claridad en tu día.
+          <%= t("landing.final_subheadline") %>
         </p>
-        <%= link_to "Probar Carlitos", "#early-access-form", class: "mt-8 inline-flex rounded-full bg-white px-7 py-4 font-extrabold text-ink transition hover:-translate-y-0.5 hover:bg-sun" %>
+        <%= link_to t("landing.final_cta"), "#early-access-form", class: "mt-8 inline-flex rounded-full bg-white px-7 py-4 font-extrabold text-ink transition hover:-translate-y-0.5 hover:bg-sun" %>
       </div>
       <div class="bg-white p-6 sm:p-8 lg:p-10">
         <%= render "early_access_form", signup: @early_access_signup %>
@@ -360,6 +311,6 @@
 <footer class="border-t border-line py-8">
   <div class="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-5 text-sm text-muted sm:flex-row sm:items-center sm:px-6 lg:px-8">
     <p class="font-semibold text-ink">Carlitos</p>
-    <p>Mandale un mensaje a Carlitos y olvidate de tener que recordarlo todo.</p>
+    <p><%= t("landing.footer_line") %></p>
   </div>
 </footer>

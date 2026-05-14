@@ -7,7 +7,7 @@ module Integrations
     end
 
     def call
-      return { ok: false, message: "Ingresá un número de WhatsApp." } if @phone.blank?
+      return { ok: false, message: I18n.t("whatsapp.connector.missing_phone") } if @phone.blank?
 
       connection = @user.integration_connections.find_or_initialize_by(provider: "whatsapp")
       connection.assign_attributes(
@@ -26,12 +26,12 @@ module Integrations
         WhatsappOutboundMessageService.new(client: @client).deliver(
           user: @user,
           to: @phone,
-          body: "Hola, soy Carlitos. Ya podés responder este mensaje para vincular WhatsApp con tu memoria."
+          body: I18n.t("whatsapp.connector.setup_message")
         )
-        { ok: true, message: "Te mandamos un WhatsApp para terminar la conexión." }
+        { ok: true, message: I18n.t("whatsapp.connector.sent") }
       else
         Rails.logger.warn("[WhatsApp] Twilio credentials missing; connection saved as pending for #{@phone}.")
-        { ok: true, message: "Guardamos tu número. Cuando Twilio esté configurado, Carlitos podrá completar la conexión." }
+        { ok: true, message: I18n.t("whatsapp.connector.saved_pending") }
       end
     end
 

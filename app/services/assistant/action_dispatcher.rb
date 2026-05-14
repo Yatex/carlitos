@@ -16,7 +16,7 @@ module Assistant
 
     def call
       klass_name = ACTIONS[@decision.action]
-      return ActionResult.new(success: false, message: "No entendí qué querés guardar. Probá decírmelo de otra forma.") unless klass_name
+      return ActionResult.new(success: false, message: I18n.t("assistant.unsupported_action")) unless klass_name
 
       klass_name.constantize.new(user: @user, arguments: @decision.arguments || {}).call
     end

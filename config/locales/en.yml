@@ -1,31 +1,602 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  date:
+    formats:
+      default: "%m/%d/%Y"
+      short: "%m/%d"
+      long: "%B %d, %Y"
+  time:
+    formats:
+      default: "%m/%d/%Y %H:%M"
+      short: "%m/%d %H:%M"
+      long: "%B %d, %Y %H:%M"
+  errors:
+    messages:
+      blank: "can't be blank"
+      invalid: "is invalid"
+      taken: "has already been taken"
+  meta:
+    title: "Carlitos — Your WhatsApp memory assistant"
+    description: "Carlitos helps you save reminders, tasks, lists, and ideas from WhatsApp so you can clear your head and keep everything under control."
+  locale:
+    es: "ES"
+    en: "EN"
+    switch_label: "Language"
+    html: "en"
+    og: "en_US"
+  nav:
+    primary: "Primary"
+    home_label: "Carlitos home"
+    dashboard: "Dashboard"
+    reminders: "Reminders"
+    lists: "Lists"
+    memory: "Memory"
+    billing: "Billing"
+    settings: "Settings"
+    account: "Account"
+    users: "Users"
+    analytics: "Analytics"
+    admin: "Admin"
+    sign_out: "Sign out"
+    how_it_works: "How it works"
+    use_cases: "Use cases"
+    benefits: "Benefits"
+    pricing: "Pricing"
+    faq: "FAQ"
+    try_carlitos: "Try Carlitos"
+  statuses:
+    subscription:
+      free: "Free"
+      trialing: "Trialing"
+      active: "Active"
+      past_due: "Past due"
+      canceled: "Canceled"
+      incomplete: "Incomplete"
+    integration:
+      connected: "Connected"
+      pending: "Pending"
+      error: "Error"
+      disconnected: "Disconnected"
+    role:
+      user: "User"
+      admin: "Admin"
+      super_admin: "Super admin"
+    assistant_channel:
+      web: "Web"
+      whatsapp: "WhatsApp"
+      email: "Email"
+    assistant_direction:
+      inbound: "Inbound"
+      outbound: "Outbound"
+  buttons:
+    save: "Save"
+    create: "Create"
+    edit_account: "Edit account"
+    disconnect: "Disconnect"
+    connect: "Connect %{name}"
+    update_whatsapp: "Update WhatsApp"
+    connect_whatsapp: "Connect WhatsApp"
+    manage_billing: "Manage billing"
+    open_stripe_portal: "Open Stripe portal"
+    choose_plan: "Choose %{plan}"
+  flash:
+    auth:
+      required: "Sign in to continue."
+    sessions:
+      signed_in: "Signed in."
+      invalid: "Incorrect email or password."
+      signed_out: "Signed out."
+    registrations:
+      welcome: "Welcome to Carlitos."
+    password_resets:
+      sent: "If that email exists, we'll send password reset instructions."
+      expired: "That link expired. Request a new one."
+      updated: "Password updated. You can sign in now."
+    account:
+      updated: "Account updated."
+    reminders:
+      created: "Reminder created."
+      updated: "Reminder updated."
+    memory_lists:
+      created: "List created."
+    memory_notes:
+      saved: "Note saved to your memory."
+    daily_briefings:
+      updated: "Daily briefing updated."
+    memory_list_items:
+      added: "Item added."
+      updated: "List updated."
+    early_access:
+      success: "Done. We'll let you know when Carlitos is ready to try."
+      invalid: "Check the email to join early access."
+    google_auth:
+      not_configured: "Google sign-in is not configured yet."
+      invalid_state: "We could not validate the Google sign-in."
+      login_failed: "Google could not complete sign-in: %{error}"
+      profile_failed: "We could not read your Google profile: %{error}"
+      created: "Account created with Google. Welcome to Carlitos."
+      signed_in: "Signed in with Google."
+    integrations:
+      unknown: "Integration not recognized."
+      disconnected: "%{name} disconnected."
+      google_missing_config: "Configure GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to connect %{name}."
+      google_invalid_state: "We could not validate the Google connection."
+      google_connected: "%{name} connected."
+      google_failed: "Google could not complete the connection: %{error}"
+    stripe:
+      checkout_failed: "We could not start Stripe payment."
+      portal_failed: "We could not open the billing portal."
+    admin:
+      permission_denied: "You do not have permission to enter the admin panel."
+      super_admin_only: "This action is only for super admins."
+      invalid_plan: "Choose a valid plan."
+      free_plan_no_extend: "The Pro trial is automatic for 14 days and cannot be extended manually."
+      future_date: "Choose a future date to extend the plan."
+      plan_updated: "Plan updated for %{email}."
+      invalid_role: "Invalid role."
+      own_role: "You cannot change your own role."
+      other_super_admin: "You cannot change another super admin's role here."
+      role_updated: "Role updated for %{email}."
+      user_not_found: "User not found."
+      super_admin_plan_blocked: "You cannot extend the plan of a super admin."
+  assistant:
+    unsupported_action: "I did not understand what you want to save. Try saying it another way."
+    default_list: "General"
+    actions:
+      create_reminder:
+        success: "Done. I'll remind you%{time}."
+        time: " on %{date}"
+      create_list:
+        success: "I created the %{title} list."
+      add_list_item:
+        success: "I added %{item} to %{list}."
+      save_memory_note:
+        default_title: "Saved note"
+        success: "I saved it to your memory."
+      schedule_daily_briefing:
+        success: "Done. I'll prepare a daily briefing for you."
+      search_memory:
+        found: "I found this: %{titles}."
+        not_found: "I did not find anything with that search yet."
+  whatsapp:
+    inbound:
+      unlinked: "Hi, I'm Carlitos. I still need to link this WhatsApp with your account."
+      failed: "I had trouble processing that message. Try again in a few minutes."
+    connector:
+      missing_phone: "Enter a WhatsApp number."
+      setup_message: "Hi, I'm Carlitos. You can reply to this message to link WhatsApp with your memory."
+      sent: "We sent you a WhatsApp message to finish the connection."
+      saved_pending: "We saved your number. When Twilio is configured, Carlitos will be able to complete the connection."
+  stripe:
+    errors:
+      unknown_plan: "That plan does not exist."
+      no_checkout: "The %{plan} plan does not use payment yet."
+      missing_price: "The %{plan} plan does not have %{env} configured."
+      missing_customer: "Your account does not have a Stripe customer yet."
+      response: "Stripe responded with %{code}."
+      not_configured: "Stripe is not configured yet."
+  auth_services:
+    google:
+      invalid_email: "Google did not return a valid email."
+      unverified_email: "Google has not verified this email yet."
+      email_linked: "That email is already linked to another Google account."
+      not_configured: "Google OAuth is not configured."
+      response: "Google responded with %{code}."
+      missing_token: "Google did not return an access token."
+      userinfo_response: "Google userinfo responded with %{code}."
+      oauth_response: "Google OAuth responded with %{code}."
+  emails:
+    welcome:
+      subject: "Welcome to Carlitos"
+      html: "<p>Hi %{name},</p><p>Carlitos is ready to help you remember fewer things by heart.</p>"
+      text: "Hi %{name}, Carlitos is ready to help you remember fewer things by heart."
+    password_reset:
+      subject: "Reset your Carlitos password"
+      html: "<p>Use this link to create a new password:</p><p><a href=\"%{url}\">Change password</a></p>"
+      text: "Use this link to create a new password: %{url}"
+    early_access:
+      subject: "You're on the Carlitos early access list"
+      html: "<p>Thanks for wanting to try Carlitos. We'll let you know when we open access.</p>"
+      text: "Thanks for wanting to try Carlitos. We'll let you know when we open access."
+  auth:
+    login_title: "Sign in — Carlitos"
+    signup_title: "Create account — Carlitos"
+    welcome_back: "Welcome back"
+    sign_in: "Sign in"
+    continue_google: "Continue with Google"
+    sign_in_google: "Sign in with Google"
+    create_account: "Create account"
+    create_account_google: "Create account with Google"
+    or_email: "or with email"
+    name: "Name"
+    email: "Email"
+    password: "Password"
+    password_confirmation: "Confirm password"
+    timezone: "Time zone"
+    timezone_hint: "We detect it from your browser, but you can change it."
+    forgot_password: "Forgot your password"
+    already_have_account: "Already have an account?"
+    no_account: "Create account"
+    signup_headline: "Start unloading your daily memory."
+    signup_subtitle: "Carlitos saves reminders, lists, and notes so they come back when they matter."
+  password_resets:
+    new_title: "Reset password — Carlitos"
+    edit_title: "New password — Carlitos"
+    eyebrow: "Password reset"
+    headline: "Recover access"
+    description: "Enter your email and, if an account exists, we'll send instructions."
+    new_password_eyebrow: "New password"
+    new_password_headline: "Update your access"
+    new_password: "New password"
+    submit: "Send instructions"
+    update: "Update password"
+  account:
+    title: "Account — Carlitos"
+    heading: "Account"
+    description: "Basic settings for your Carlitos experience."
+    new_password: "New password"
+    save_changes: "Save changes"
+  dashboard:
+    title: "Dashboard — Carlitos"
+    memory_eyebrow: "Your memory"
+    greeting: "Hi, %{name}."
+    intro: "This is where everything you ask Carlitos to remember lives: reminders, lists, notes, and upcoming briefings."
+    subscription: "Subscription"
+    status: "Status: %{status}"
+    trial_remaining: "%{count} trial days left."
+    trial_expired: "Your Pro trial has ended."
+    access_until: "Access until %{date}."
+    create_reminder: "Create reminder"
+    reminder_placeholder: "Pay rent"
+    reminder_body_placeholder: "Optional details"
+    create_list: "Create list"
+    list_placeholder: "Groceries"
+    save_note: "Save note"
+    note_placeholder: "ID expires in August"
+    note_body_placeholder: "What you want to remember"
+    daily_briefing: "Daily briefing"
+    enable_summary: "Enable summary"
+    configure: "Configure"
+    recent_reminders: "Recent reminders"
+    recent_lists: "Recent lists"
+    recent_notes: "Recent notes"
+    assistant_activity: "Assistant activity"
+    no_reminders: "No reminders yet."
+    no_lists: "No lists yet."
+    no_notes: "No notes yet."
+    no_activity: "WhatsApp and AI activity will appear here when you connect channels."
+    no_date: "No date"
+    item:
+      one: "item"
+      other: "items"
+  billing:
+    title: "Billing — Carlitos"
+    eyebrow: "Billing"
+    headline: "Choose how much you want Carlitos to remember for you."
+    subtitle: "You get 14 free days of Pro to try Carlitos. After that, you can stay on Pro or add a Family plan for shared memory without losing private spaces."
+    current_plan: "Current plan"
+    status: "Status: %{status}"
+    trial_active: "Active trial: %{count} days left."
+    trial_expired: "Your Pro trial has ended."
+    access_until: "Access until %{date}."
+    portal_after_checkout: "The Stripe portal appears after your first checkout. For now, you can choose a plan below."
+    current: "Current"
+    your_current_plan: "Your current plan"
+    trial_initial: "Initial trial"
+    trial_ended: "Trial ended"
+    price_pending: "%{env} pending"
+    join_waitlist: "Join the list"
+    included: "Included"
+    unlock_heading: "How features unlock"
+    free_unlock: "An automatic 14-day Pro trial: WhatsApp, voice, Gmail, calendar, search, and daily briefing with reasonable use."
+    pro_unlock: "Unlocks complete personal memory for one person: voice, Gmail, calendar, searches, follow-ups, and smart reminders."
+    family_unlock: "Adds up to 5 people with a shared family space and private memory for each member."
+    stripe_note: "Stripe Checkout uses environment variables for Price IDs. There are no real prices or hardcoded credentials in the code."
+    plans:
+      free:
+        name: "Pro trial"
+        price: "14 days"
+        description: "Automatically starts when you create your account and includes Pro features for 14 days."
+        badge: "Free to start"
+        features:
+          - "Pro features for 14 days"
+          - "WhatsApp access"
+          - "Limited voice notes"
+          - "Gmail and calendar"
+          - "Daily briefing"
+        limits:
+          - "Only starts when the account is created"
+          - "Reasonable use during the trial"
+          - "No Stripe payment"
+      pro:
+        name: "Pro"
+        price: "USD 15/month"
+        description: "For one person who wants to use Carlitos every day as a personal external memory."
+        badge: "Recommended"
+        features:
+          - "WhatsApp as the main channel"
+          - "Smart reminders"
+          - "Personal lists and notes"
+          - "Voice notes"
+          - "Daily briefing"
+          - "Search your memory"
+          - "Gmail and calendar"
+          - "Follow-ups"
+          - "Priority processing"
+        limits:
+          - "1 user"
+          - "Reasonable message and audio use"
+      family:
+        name: "Family"
+        price: "USD 39/month"
+        description: "For up to 5 people coordinating home, family, and shared commitments."
+        badge: "Up to 5 people"
+        features:
+          - "Everything in Pro for each member"
+          - "Shared lists"
+          - "Shared reminders"
+          - "Shared family memory"
+          - "Private notes, lists, and reminders"
+          - "Family invitations"
+          - "Group admin"
+          - "Briefings for each member"
+        limits:
+          - "Up to 5 members"
+          - "Reasonable family use"
+  settings:
+    title: "Settings — Carlitos"
+    eyebrow: "Settings"
+    headline: "Connect your channels."
+    subtitle: "Gmail, Calendar, and WhatsApp give Carlitos more context so it can help without making you copy everything by hand."
+    account: "Account"
+    connected_as: "Connected as:"
+    missing_config: "Missing configuration:"
+    authorized_scopes: "Authorized scopes:"
+    registered: "registered"
+    integrations:
+      gmail:
+        name: "Gmail"
+        short_name: "Gmail"
+        summary: "Carlitos can use authorized emails as context for follow-ups, reminders, and searches."
+        value: "Detect commitments, important details, and pending tasks that live in your inbox."
+      google_calendar:
+        name: "Google Calendar"
+        short_name: "Calendar"
+        summary: "Carlitos can read your authorized calendar for briefings, meetings, and context-aware reminders."
+        value: "Understand what you have today and when it makes sense to alert you."
+      whatsapp:
+        name: "WhatsApp"
+        short_name: "WhatsApp"
+        summary: "The main channel for sending messages, voice notes, lists, and reminders to Carlitos."
+        value: "Capture things in seconds from where you already communicate every day."
+  admin:
+    users_title: "Admin users — Carlitos"
+    analytics_title: "Admin analytics — Carlitos"
+    eyebrow: "Admin"
+    users_heading: "Users and plans"
+    users_description: "Manage internal permissions, review each account status, and manually extend plans when needed."
+    view_analytics: "View analytics"
+    total_users_count: "%{count} users"
+    filter: "Filter"
+    email: "Email"
+    email_placeholder: "person@example.com"
+    role: "Role"
+    plan: "Plan"
+    all: "All"
+    user: "User"
+    usage: "Usage"
+    extend_plan: "Extend plan"
+    joined_label: "Joined"
+    joined: "Joined: %{date}"
+    status: "Status: %{status}"
+    access_until: "Until %{date}"
+    no_manual_expiration: "No manual expiration"
+    granted_by: "Extended by %{email}"
+    no_manual_super_admin: "Only a super admin can edit this user."
+    page: "Page %{page} of %{pages}"
+    previous: "Previous"
+    next: "Next"
+    analytics_heading: "General statistics"
+    analytics_description: "A quick view of users, paid plans, and Carlitos' main activity."
+    manage_users: "Manage users"
+    total_users: "Total users"
+    total_users_hint: "All registered accounts"
+    paying_users: "Paying plans"
+    paying_users_hint: "Active Pro or Family users"
+    active_trials: "Active trials"
+    active_trials_hint: "Automatic 14-day Pro trial"
+    expired_trials: "Expired trials"
+    expired_trials_hint: "Accounts whose trial has ended"
+    early_access: "Early access"
+    early_access_hint: "People waiting to try Carlitos"
+    admins: "Admins"
+    admins_hint: "Admin and super admin"
+    reminders: "Reminders"
+    lists: "Lists"
+    notes: "Memory notes"
+    assistant_messages: "Assistant messages"
+    active_briefings: "Active briefings"
+    whatsapp_connected: "WhatsApp connected"
+    gmail_connected: "Gmail connected"
+    calendar_connected: "Calendar connected"
+    users_by_plan: "Users by plan"
+    subscription_statuses: "Subscription statuses"
+    roles: "Roles"
+    latest_users: "Latest users"
+    save: "Save"
+  resources:
+    reminders:
+      title: "Reminders — Carlitos"
+      heading: "Reminders"
+      index_headline: "What Carlitos is keeping in mind"
+      new: "New reminder"
+      empty: "No reminders yet."
+      empty_pending: "No pending reminders yet."
+      no_details: "No details"
+      no_date: "No date"
+      complete: "Complete"
+      create_title: "New reminder — Carlitos"
+      create_heading: "Create reminder"
+      title_placeholder: "Title"
+      details_placeholder: "Details"
+      submit: "Create reminder"
+      mark_done: "Mark done"
+    lists:
+      title: "Lists — Carlitos"
+      heading: "Lists"
+      index_headline: "Your living lists"
+      new: "New list"
+      empty: "No lists yet."
+      create_title: "New list — Carlitos"
+      create_heading: "Create list"
+      title_placeholder: "Groceries"
+      title_placeholder_long: "Groceries, trip, work..."
+      submit: "Create list"
+      items: "Items"
+      pending:
+        one: "pending"
+        other: "pending"
+      add_item: "Add"
+      item_placeholder: "Coffee"
+      item_placeholder_long: "Add item"
+      done: "Done"
+      back: "Back to lists"
+      reopen: "Reopen"
+      complete: "Complete"
+      empty_items: "This list does not have items yet."
+    notes:
+      title: "Memory — Carlitos"
+      heading: "Memory"
+      index_headline: "Saved notes"
+      new: "New note"
+      empty: "No memory notes yet."
+      empty_saved: "No saved notes yet."
+      create_title: "New note — Carlitos"
+      create_heading: "Save memory note"
+      title_placeholder: "Recommended restaurant"
+      title_placeholder_short: "Title"
+      content_placeholder: "What Carlitos should remember"
+      content_placeholder_later: "Something you want to remember later"
+      submit: "Save note"
+    daily_briefing:
+      title: "Daily briefing — Carlitos"
+      heading: "Daily briefing"
+      description: "Choose whether you want Carlitos to summarize the important things every morning."
+      enabled: "Enabled"
+      time: "Delivery time"
+      timezone: "Time zone"
+      submit: "Save briefing"
+  early_access:
+    title: "Early access"
+    name: "Name"
+    name_placeholder: "Your name"
+    email: "Email"
+    email_placeholder: "you@example.com"
+    submit: "I want to try Carlitos"
+    hint: "We'll write when early access is ready. No noise, no weird promises."
+  landing:
+    title: "Carlitos — Your WhatsApp memory assistant"
+    description: "Carlitos helps you save reminders, tasks, lists, and ideas from WhatsApp so you can clear your head and keep everything under control."
+    hero_badge: "Daily memory, without opening another app"
+    hero_headline: "Carlitos remembers for you."
+    hero_subheadline: "Your WhatsApp memory assistant: saves reminders, tasks, lists, and ideas, and alerts you when it really matters."
+    primary_cta: "Start now"
+    secondary_cta: "See how it works"
+    stats:
+      - ["30s", "to capture an idea"]
+      - ["24/7", "available memory"]
+      - ["0", "boards to maintain"]
+    chat_aria: "WhatsApp message examples"
+    chat_label: "in WhatsApp"
+    chat_1: "Carlitos, remind me to pay rent on Friday at 10"
+    chat_2: "Add milk, coffee, and eggs to the grocery list"
+    chat_3: "Tomorrow, give me a summary of what matters"
+    assistant_reply: "Done. I'll remind you Friday at 10:00."
+    organized_aria: "Information organized by Carlitos"
+    organized_label: "Organized by Carlitos"
+    reminder_created: "Reminder created"
+    reminder_title: "Rent"
+    reminder_created_detail: "Friday, 10:00 · Calm WhatsApp alert"
+    list_updated: "List updated"
+    grocery_title: "Groceries"
+    grocery_detail: "Milk · Coffee · Eggs"
+    daily_briefing_scheduled: "Briefing scheduled"
+    briefing_title: "Tomorrow's summary"
+    briefing_detail: "Daily briefing scheduled"
+    context_saved: "Context saved"
+    context_title: "Details for later"
+    context_detail: "Important context saved"
+    problem_eyebrow: "The problem"
+    problem_headline: "You're not forgetting because you're disorganized. You're trying to remember too much."
+    problem_copy: "Information is scattered across chats, notes, calendars, emails, voice notes, and memory. Carlitos gives you one simple place to send what appears and trust it will come back at the right moment."
+    pain_1_title: "I remember too late"
+    pain_1_copy: "That payment, appointment, or follow-up shows up in your head after the useful moment has passed."
+    pain_2_title: "I have too many loose things"
+    pain_2_copy: "Ideas, family tasks, work details, and lists end up spread across too many places."
+    pain_3_title: "I don't want another app"
+    pain_3_copy: "When a tool asks for too many steps, it becomes another thing you have to remember."
+    how_eyebrow: "How it works"
+    how_headline: "Send a message. Carlitos organizes it."
+    capture_title: "Capture"
+    capture_copy: "Send a text, voice note, forwarded message, idea, task, or reminder as soon as it appears."
+    organize_title: "Organize"
+    organize_copy: "Carlitos understands whether it's a task, reminder, list, note, calendar item, or useful context."
+    remind_title: "Remind"
+    remind_copy: "It brings it back through WhatsApp, email, notifications, or a daily briefing when needed."
+    features_eyebrow: "Features"
+    features_headline: "An external memory for everyday life."
+    features_copy: "Fast capture, smart organization, and calm reminders so your head doesn't have to carry everything."
+    features:
+      - ["Smart reminders", "One-time or recurring reminders using natural language."]
+      - ["Self-updating lists", "Groceries, trips, work, family, ideas, and personal lists."]
+      - ["Daily briefing", "Receive a simple morning summary of what matters today."]
+      - ["Voice note capture", "Send a voice note and Carlitos turns it into organized information."]
+      - ["Personal context", "Save preferences, links, names, instructions, and commitments."]
+      - ["Calendar-aware help", "Optional connection to help with meetings and schedules."]
+      - ["Follow-ups", "Remember to reply, close open loops, or revisit a conversation."]
+      - ["Search your memory", "Ask what restaurant someone recommended or what you needed to buy."]
+    use_cases_eyebrow: "Use cases"
+    use_cases_headline: "For work, family, study, and personal life."
+    use_cases:
+      - ["Professionals", "Meetings and pending work", "Follow-ups, clients, deliveries, deadlines, and quick notes between meetings."]
+      - ["Families", "What can't be missed", "School tasks, shopping, medical appointments, and shared reminders."]
+      - ["Founders", "Ideas and follow-up", "Product ideas, investor follow-ups, team tasks, and fast-changing context."]
+      - ["Students", "Study in order", "Exams, assignments, summaries, readings, and practice reminders."]
+      - ["Personal life", "Everyday details", "Birthdays, routines, habits, errands, health, and small promises."]
+    clarity_eyebrow: "Principles"
+    clarity_headline: "Less noise. More clarity."
+    clarity_copy: "Carlitos is designed to reduce mental load, not to give you another dashboard to check all day."
+    principles:
+      - "WhatsApp-first"
+      - "No complex setup"
+      - "Fast capture"
+      - "Calm reminders"
+      - "Clear daily summary"
+      - "Privacy-first"
+    clarity_footer: "Built to reduce mental load, not create more maintenance."
+    trust_1_title: "Designed for people with too much in their head."
+    trust_1_copy: "An honest early product focused on relief, clarity, and everyday usefulness."
+    trust_2_title: "Built to use in seconds."
+    trust_2_copy: "Made to capture something quickly, even in the middle of a packed day."
+    trust_3_title: "Simple outside. Smart inside."
+    trust_3_copy: "Carlitos organizes what it receives so you can retrieve it later."
+    pricing_eyebrow: "Pricing"
+    pricing_headline: "Try Pro for free. Choose personal or family memory after."
+    activate_trial: "Activate trial"
+    try_pro: "Try Pro"
+    try_family: "Choose Family"
+    join_list: "Join the list"
+    faq_eyebrow: "FAQ"
+    faq_headline: "Frequently asked questions."
+    faqs:
+      - ["Do I need to install another app?", "Not to start. The idea is that you can use Carlitos from WhatsApp, where you already are."]
+      - ["Can I use it from WhatsApp?", "Yes. Carlitos is designed with WhatsApp as the main channel for capturing and receiving reminders."]
+      - ["Can Carlitos understand voice notes?", "Yes. You can send audio to turn ideas, tasks, or reminders into structured information."]
+      - ["Can it connect to my calendar?", "The calendar connection is optional and designed to improve meetings, schedules, and important alerts."]
+      - ["What happens with my data?", "Carlitos is designed privacy-first. Your data should help you remember, not add noise."]
+      - ["Can I cancel anytime?", "Yes. When there is an active subscription, you'll be able to cancel it without strange steps."]
+      - ["Is it for work or personal life?", "Both. Carlitos helps with work, family, study, shopping, habits, ideas, and personal tasks."]
+      - ["What makes Carlitos different from a notes app?", "You don't have to organize everything manually or search alone. Carlitos captures quickly, understands context, and brings it back when it matters."]
+    final_headline: "Stop carrying everything in your head."
+    final_subheadline: "Send Carlitos a message and bring clarity back to your day."
+    final_cta: "Try Carlitos"
+    footer_line: "Send Carlitos a message and stop having to remember everything yourself."

@@ -9,7 +9,7 @@ class DailyBriefingsController < ApplicationController
     @daily_briefing = current_user.daily_briefing || current_user.create_daily_briefing!(timezone: current_user.timezone)
 
     if @daily_briefing.update(daily_briefing_params)
-      redirect_back fallback_location: edit_daily_briefing_path, notice: "Briefing diario actualizado."
+      redirect_back fallback_location: edit_daily_briefing_path, notice: t("flash.daily_briefings.updated")
     else
       render :edit, status: :unprocessable_entity
     end

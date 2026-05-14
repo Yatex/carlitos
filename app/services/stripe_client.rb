@@ -19,11 +19,11 @@ class StripeClient
     return missing_configuration("STRIPE_SECRET_KEY") unless configured?
 
     billing_plan = Billing::PlanCatalog.find(plan)
-    return { error: "Ese plan no existe." } unless billing_plan
-    return { error: "El plan #{billing_plan.name} todavía no usa checkout." } unless billing_plan.checkoutable?
+    return { error: I18n.t("stripe.errors.unknown_plan") } unless billing_plan
+    return { error: I18n.t("stripe.errors.no_checkout", plan: billing_plan.name) } unless billing_plan.checkoutable?
 
     price_id = billing_plan.stripe_price_id
-    return { error: "El plan #{billing_plan.name} no tiene #{billing_plan.stripe_price_env} configurado." } if price_id.blank?
+    return { error: I18n.t("stripe.errors.missing_price", plan: billing_plan.name, env: billing_plan.stripe_price_env) } if price_id.blank?
 
     customer = ensure_customer(user)
     return customer if customer[:error]
@@ -46,7 +46,7 @@ class StripeClient
 
   def create_customer_portal_session(user:, return_url:)
     return missing_configuration("STRIPE_SECRET_KEY") unless configured?
-    return { error: "Tu cuenta todavía no tiene cliente de Stripe." } if user.stripe_customer_id.blank?
+    return { error: I18n.t("stripe.errors.missing_customer") } if user.stripe_customer_id.blank?
 
     post_form("/billing_portal/sessions", { customer: user.stripe_customer_id, return_url: })
   end
@@ -87,7 +87,7 @@ class StripeClient
     if response.is_a?(Net::HTTPSuccess)
       body.symbolize_keys
     else
-      { error: body.dig("error", "message") || "Stripe respondió #{response.code}." }
+      { error: body.dig("error", "message") || I18n.t("stripe.errors.response", code: response.code) }
     end
   rescue StandardError => e
     Rails.logger.warn("[Stripe] API request failed: #{e.class} #{e.message}")
@@ -96,7 +96,7 @@ class StripeClient
 
   def missing_configuration(name)
     Rails.logger.warn("[Stripe] #{name} missing; Stripe action skipped.")
-    { error: "Stripe no está configurado todavía." }
+    { error: I18n.t("stripe.errors.not_configured") }
   end
 
   def valid_signature?(payload, header)

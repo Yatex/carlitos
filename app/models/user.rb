@@ -42,6 +42,18 @@ class User < ApplicationRecord
     current_plan.in?(%w[pro family]) && subscription_status.in?(%w[trialing active]) && plan_access_active?
   end
 
+  def pro_trial?
+    free_trial_active?
+  end
+
+  def pro_access?
+    pro_trial? || paid?
+  end
+
+  def family_access?
+    current_plan == "family" && subscription_status.in?(%w[trialing active]) && plan_access_active?
+  end
+
   def admin_like?
     admin? || super_admin?
   end

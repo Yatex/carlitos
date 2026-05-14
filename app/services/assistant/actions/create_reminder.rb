@@ -14,7 +14,7 @@ module Assistant
           recurrence_rule: @arguments["recurrence_rule"],
           status: "pending"
         )
-        ActionResult.new(success: true, message: "Listo. Te lo recuerdo#{time_fragment(reminder)}.", record: reminder)
+        ActionResult.new(success: true, message: I18n.t("assistant.actions.create_reminder.success", time: time_fragment(reminder)), record: reminder)
       end
 
       private
@@ -24,7 +24,7 @@ module Assistant
       end
 
       def time_fragment(reminder)
-        reminder.remind_at ? " el #{I18n.l(reminder.remind_at, format: :short)}" : ""
+        reminder.remind_at ? I18n.t("assistant.actions.create_reminder.time", date: I18n.l(reminder.remind_at, format: :short)) : ""
       end
     end
   end

@@ -1,30 +1,49 @@
 <header class="sticky top-0 z-50 border-b border-line/80 bg-cream/90 backdrop-blur-xl">
-  <nav class="mx-auto flex max-w-7xl items-center justify-between gap-5 px-5 py-4 sm:px-6 lg:px-8" aria-label="Principal">
-    <%= link_to root_path, class: "flex items-center gap-3", aria: { label: "Inicio de Carlitos" } do %>
+  <nav class="mx-auto flex max-w-7xl items-center justify-between gap-5 px-5 py-4 sm:px-6 lg:px-8" aria-label="<%= t("nav.primary") %>">
+    <%= link_to root_path, class: "flex items-center gap-3", aria: { label: t("nav.home_label") } do %>
       <%= image_tag "carlitos-mark.svg", alt: "Carlitos", class: "h-10 w-10 rounded-lg shadow-card" %>
       <span class="text-xl font-black text-ink">Carlitos</span>
     <% end %>
 
     <div class="hidden items-center gap-7 text-sm lg:flex">
-      <%= nav_link_to "Cómo funciona", root_path(anchor: "como-funciona") %>
-      <%= nav_link_to "Casos de uso", root_path(anchor: "casos") %>
-      <%= nav_link_to "Beneficios", root_path(anchor: "beneficios") %>
-      <%= nav_link_to "Precios", root_path(anchor: "precios") %>
-      <%= nav_link_to "FAQ", root_path(anchor: "faq") %>
+      <%= nav_link_to t("nav.how_it_works"), root_path(anchor: "como-funciona") %>
+      <%= nav_link_to t("nav.use_cases"), root_path(anchor: "casos") %>
+      <%= nav_link_to t("nav.benefits"), root_path(anchor: "beneficios") %>
+      <%= nav_link_to t("nav.pricing"), root_path(anchor: "precios") %>
+      <%= nav_link_to t("nav.faq"), root_path(anchor: "faq") %>
     </div>
 
     <% if authenticated? %>
-      <%= link_to "Dashboard", dashboard_path, class: "rounded-full bg-ink px-5 py-3 text-sm font-bold text-white shadow-card transition hover:-translate-y-0.5 hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-ocean/20" %>
+      <div class="flex items-center gap-3">
+        <div class="hidden items-center rounded-full border border-line bg-white/80 p-1 text-xs font-black shadow-card sm:flex" aria-label="<%= t("locale.switch_label") %>">
+          <% I18n.available_locales.each do |locale| %>
+            <%= link_to t("locale.#{locale}"), language_switch_path(locale), class: "rounded-full px-2.5 py-1 transition #{I18n.locale == locale ? "bg-ink text-white" : "text-muted hover:text-ocean"}" %>
+          <% end %>
+        </div>
+        <%= link_to t("nav.dashboard"), dashboard_path, class: "rounded-full bg-ink px-5 py-3 text-sm font-bold text-white shadow-card transition hover:-translate-y-0.5 hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-ocean/20" %>
+      </div>
     <% else %>
-      <%= link_to "Probar Carlitos", signup_path, class: "rounded-full bg-ink px-5 py-3 text-sm font-bold text-white shadow-card transition hover:-translate-y-0.5 hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-ocean/20" %>
+      <div class="flex items-center gap-3">
+        <div class="hidden items-center rounded-full border border-line bg-white/80 p-1 text-xs font-black shadow-card sm:flex" aria-label="<%= t("locale.switch_label") %>">
+          <% I18n.available_locales.each do |locale| %>
+            <%= link_to t("locale.#{locale}"), language_switch_path(locale), class: "rounded-full px-2.5 py-1 transition #{I18n.locale == locale ? "bg-ink text-white" : "text-muted hover:text-ocean"}" %>
+          <% end %>
+        </div>
+        <%= link_to t("nav.try_carlitos"), signup_path, class: "rounded-full bg-ink px-5 py-3 text-sm font-bold text-white shadow-card transition hover:-translate-y-0.5 hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-ocean/20" %>
+      </div>
     <% end %>
   </nav>
 
   <div class="no-scrollbar mx-auto flex max-w-7xl gap-5 overflow-x-auto px-5 pb-3 text-sm font-semibold text-muted sm:px-6 lg:hidden lg:px-8">
-    <%= link_to "Cómo funciona", root_path(anchor: "como-funciona"), class: "shrink-0 transition hover:text-ink" %>
-    <%= link_to "Casos de uso", root_path(anchor: "casos"), class: "shrink-0 transition hover:text-ink" %>
-    <%= link_to "Beneficios", root_path(anchor: "beneficios"), class: "shrink-0 transition hover:text-ink" %>
-    <%= link_to "Precios", root_path(anchor: "precios"), class: "shrink-0 transition hover:text-ink" %>
-    <%= link_to "FAQ", root_path(anchor: "faq"), class: "shrink-0 transition hover:text-ink" %>
+    <%= link_to t("nav.how_it_works"), root_path(anchor: "como-funciona"), class: "shrink-0 transition hover:text-ink" %>
+    <%= link_to t("nav.use_cases"), root_path(anchor: "casos"), class: "shrink-0 transition hover:text-ink" %>
+    <%= link_to t("nav.benefits"), root_path(anchor: "beneficios"), class: "shrink-0 transition hover:text-ink" %>
+    <%= link_to t("nav.pricing"), root_path(anchor: "precios"), class: "shrink-0 transition hover:text-ink" %>
+    <%= link_to t("nav.faq"), root_path(anchor: "faq"), class: "shrink-0 transition hover:text-ink" %>
+    <span class="ml-auto flex shrink-0 gap-2 sm:hidden">
+      <% I18n.available_locales.each do |locale| %>
+        <%= link_to t("locale.#{locale}"), language_switch_path(locale), class: "transition #{I18n.locale == locale ? "text-ink" : "text-muted"}" %>
+      <% end %>
+    </span>
   </div>
 </header>

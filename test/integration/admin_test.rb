@@ -40,7 +40,7 @@ class AdminTest < ActionDispatch::IntegrationTest
     assert_equal end_date, target.plan_expires_at.to_date
   end
 
-  test "admin cannot manually extend the free trial plan" do
+  test "admin cannot manually extend the Pro trial plan" do
     sign_in_as users(:admin)
     target = users(:one)
 
@@ -51,7 +51,7 @@ class AdminTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to admin_users_path
     assert_equal "free", target.reload.current_plan
-    assert_equal "El plan Free es una prueba automática de 14 días y no se extiende manualmente.", flash[:alert]
+    assert_equal I18n.t("flash.admin.free_plan_no_extend", locale: :es), flash[:alert]
   end
 
   test "super admin can update another user role" do

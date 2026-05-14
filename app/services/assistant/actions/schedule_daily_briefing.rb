@@ -13,7 +13,7 @@ module Assistant
           delivery_time: @arguments["delivery_time"].presence || briefing.delivery_time,
           timezone: @arguments["timezone"].presence || @user.timezone
         )
-        ActionResult.new(success: true, message: "Listo. Te preparo un briefing diario.", record: briefing)
+        ActionResult.new(success: true, message: I18n.t("assistant.actions.schedule_daily_briefing.success"), record: briefing)
       end
     end
   end

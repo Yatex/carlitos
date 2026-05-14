@@ -6,7 +6,7 @@ class MemoryListItemsController < ApplicationController
     item = @memory_list.memory_list_items.new(memory_list_item_params)
 
     if item.save
-      redirect_back fallback_location: memory_list_path(@memory_list), notice: "Ítem agregado."
+      redirect_back fallback_location: memory_list_path(@memory_list), notice: t("flash.memory_list_items.added")
     else
       redirect_back fallback_location: memory_list_path(@memory_list), alert: item.errors.full_messages.to_sentence
     end
@@ -16,7 +16,7 @@ class MemoryListItemsController < ApplicationController
     item = @memory_list.memory_list_items.find(params[:id])
     completed_at = ActiveModel::Type::Boolean.new.cast(params.dig(:memory_list_item, :completed)) ? Time.current : nil
     item.update!(completed_at:)
-    redirect_back fallback_location: memory_list_path(@memory_list), notice: "Lista actualizada."
+    redirect_back fallback_location: memory_list_path(@memory_list), notice: t("flash.memory_list_items.updated")
   end
 
   private

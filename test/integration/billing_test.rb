@@ -7,10 +7,13 @@ class BillingTest < ActionDispatch::IntegrationTest
     get billing_path
 
     assert_response :success
-    assert_includes response.body, "Free"
+    assert_includes response.body, "Prueba Pro"
     assert_includes response.body, "Pro"
-    assert_includes response.body, "Family / Team"
-    assert_includes response.body, "Recordatorios ilimitados"
-    assert_includes response.body, "Contexto desde Gmail"
+    assert_includes response.body, "Familia"
+    assert_includes response.body, "USD 15/mes"
+    assert_includes response.body, "USD 39/mes"
+    assert_includes response.body, "Hasta 5 personas"
+    assert_includes response.body, "Recordatorios inteligentes"
+    assert_includes response.body, "Gmail y calendario"
   end
 end

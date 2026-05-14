@@ -28,17 +28,17 @@ module Admin
 
       plan = Billing::PlanCatalog.find(params[:current_plan])
       unless plan
-        redirect_to admin_users_path, alert: "Elegí un plan válido."
+        redirect_to admin_users_path, alert: t("flash.admin.invalid_plan")
         return
       end
       unless plan.paid?
-        redirect_to admin_users_path, alert: "El plan Free es una prueba automática de 14 días y no se extiende manualmente."
+        redirect_to admin_users_path, alert: t("flash.admin.free_plan_no_extend")
         return
       end
 
       expires_at = parse_end_date(params[:plan_expires_on])
       if expires_at.blank?
-        redirect_to admin_users_path, alert: "Elegí una fecha futura para extender el plan."
+        redirect_to admin_users_path, alert: t("flash.admin.future_date")
         return
       end
 
@@ -50,7 +50,7 @@ module Admin
         plan_granted_at: Time.current
       )
 
-      redirect_to admin_users_path, notice: "Plan actualizado para #{@user.email}."
+      redirect_to admin_users_path, notice: t("flash.admin.plan_updated", email: @user.email)
     rescue ActiveRecord::RecordInvalid => e
       redirect_to admin_users_path, alert: e.record.errors.full_messages.to_sentence
     end
@@ -58,22 +58,22 @@ module Admin
     def update_role
       new_role = params[:role].to_s
       unless User.roles.key?(new_role)
-        redirect_to admin_users_path, alert: "Rol inválido."
+        redirect_to admin_users_path, alert: t("flash.admin.invalid_role")
         return
       end
 
       if @user == current_user
-        redirect_to admin_users_path, alert: "No podés cambiar tu propio rol."
+        redirect_to admin_users_path, alert: t("flash.admin.own_role")
         return
       end
 
       if @user.super_admin?
-        redirect_to admin_users_path, alert: "No se cambia el rol de otro super admin desde acá."
+        redirect_to admin_users_path, alert: t("flash.admin.other_super_admin")
         return
       end
 
       @user.update!(role: new_role)
-      redirect_to admin_users_path, notice: "Rol actualizado para #{@user.email}."
+      redirect_to admin_users_path, notice: t("flash.admin.role_updated", email: @user.email)
     rescue ActiveRecord::RecordInvalid => e
       redirect_to admin_users_path, alert: e.record.errors.full_messages.to_sentence
     end
@@ -83,12 +83,12 @@ module Admin
     def set_user
       @user = User.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      redirect_to admin_users_path, alert: "Usuario no encontrado."
+      redirect_to admin_users_path, alert: t("flash.admin.user_not_found")
     end
 
     def extend_plan_blocker
       return nil if current_user.super_admin?
-      return "No podés extender el plan de un super admin." if @user.super_admin?
+      return t("flash.admin.super_admin_plan_blocked") if @user.super_admin?
 
       nil
     end

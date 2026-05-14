@@ -7,7 +7,7 @@ class StripePortalsController < ApplicationController
     if session[:url].present?
       redirect_to session[:url], allow_other_host: true
     else
-      redirect_to billing_path, alert: session[:error] || "No pudimos abrir el portal de facturación."
+      redirect_to billing_path, alert: session[:error] || t("flash.stripe.portal_failed")
     end
   end
 end

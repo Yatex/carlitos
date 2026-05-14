@@ -31,7 +31,7 @@ module Integrations
     end
 
     def exchange_code(code, callback_url:)
-      return { ok: false, error: "Google OAuth no está configurado." } unless configured?
+      return { ok: false, error: I18n.t("auth_services.google.not_configured") } unless configured?
 
       uri = URI(TOKEN_URL)
       request = Net::HTTP::Post.new(uri)
@@ -49,7 +49,7 @@ module Integrations
       if response.is_a?(Net::HTTPSuccess)
         { ok: true, body: body }
       else
-        { ok: false, error: body.dig("error_description") || body["error"] || "Google OAuth respondió #{response.code}." }
+        { ok: false, error: body.dig("error_description") || body["error"] || I18n.t("auth_services.google.oauth_response", code: response.code) }
       end
     rescue StandardError => e
       Rails.logger.warn("[Google OAuth] Token exchange failed: #{e.class} #{e.message}")

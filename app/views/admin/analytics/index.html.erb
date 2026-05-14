@@ -1,25 +1,25 @@
-<% content_for :title, "Estadísticas admin — Carlitos" %>
+<% content_for :title, t("admin.analytics_title") %>
 
 <%= render "shared/app_header" %>
 
 <main class="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
   <section class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
     <div>
-      <p class="text-sm font-black uppercase text-ocean">Admin</p>
-      <h1 class="mt-2 text-4xl font-black text-ink">Estadísticas generales</h1>
-      <p class="mt-3 max-w-2xl leading-7 text-muted">Una vista rápida de usuarios, planes pagos y actividad principal de Carlitos.</p>
+      <p class="text-sm font-black uppercase text-ocean"><%= t("admin.eyebrow") %></p>
+      <h1 class="mt-2 text-4xl font-black text-ink"><%= t("admin.analytics_heading") %></h1>
+      <p class="mt-3 max-w-2xl leading-7 text-muted"><%= t("admin.analytics_description") %></p>
     </div>
-    <%= link_to "Gestionar usuarios", admin_users_path, class: "inline-flex rounded-full bg-ink px-5 py-3 text-sm font-extrabold text-white shadow-card transition hover:bg-ocean" %>
+    <%= link_to t("admin.manage_users"), admin_users_path, class: "inline-flex rounded-full bg-ink px-5 py-3 text-sm font-extrabold text-white shadow-card transition hover:bg-ocean" %>
   </section>
 
   <section class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
     <% [
-      ["Usuarios totales", @stats[:total_users], "Todas las cuentas registradas"],
-      ["Pagando planes", @stats[:paying_users], "Pro o Family activos"],
-      ["Trials activos", @stats[:active_free_trials], "Free automático de 14 días"],
-      ["Trials vencidos", @stats[:expired_free_trials], "Cuentas que ya terminaron la prueba"],
-      ["Early access", @stats[:early_access_signups], "Personas esperando probar"],
-      ["Admins", @stats[:admin_users], "Admin y super admin"]
+      [t("admin.total_users"), @stats[:total_users], t("admin.total_users_hint")],
+      [t("admin.paying_users"), @stats[:paying_users], t("admin.paying_users_hint")],
+      [t("admin.active_trials"), @stats[:active_free_trials], t("admin.active_trials_hint")],
+      [t("admin.expired_trials"), @stats[:expired_free_trials], t("admin.expired_trials_hint")],
+      [t("admin.early_access"), @stats[:early_access_signups], t("admin.early_access_hint")],
+      [t("admin.admins"), @stats[:admin_users], t("admin.admins_hint")]
     ].each do |label, value, hint| %>
       <article class="rounded-lg border border-line bg-white/80 p-5 shadow-card">
         <p class="text-xs font-black uppercase text-muted"><%= label %></p>
@@ -31,14 +31,14 @@
 
   <section class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
     <% [
-      ["Recordatorios", @stats[:reminders]],
-      ["Listas", @stats[:memory_lists]],
-      ["Notas de memoria", @stats[:memory_notes]],
-      ["Mensajes asistente", @stats[:assistant_messages]],
-      ["Briefings activos", @stats[:enabled_daily_briefings]],
-      ["WhatsApp conectado", @stats[:whatsapp_connections]],
-      ["Gmail conectado", @stats[:gmail_connections]],
-      ["Calendar conectado", @stats[:calendar_connections]]
+      [t("admin.reminders"), @stats[:reminders]],
+      [t("admin.lists"), @stats[:memory_lists]],
+      [t("admin.notes"), @stats[:memory_notes]],
+      [t("admin.assistant_messages"), @stats[:assistant_messages]],
+      [t("admin.active_briefings"), @stats[:enabled_daily_briefings]],
+      [t("admin.whatsapp_connected"), @stats[:whatsapp_connections]],
+      [t("admin.gmail_connected"), @stats[:gmail_connections]],
+      [t("admin.calendar_connected"), @stats[:calendar_connections]]
     ].each do |label, value| %>
       <article class="rounded-lg border border-line bg-cream p-5">
         <p class="text-sm font-extrabold text-muted"><%= label %></p>
@@ -49,7 +49,7 @@
 
   <section class="mt-8 grid gap-6 lg:grid-cols-3">
     <article class="rounded-lg border border-line bg-white/80 p-5 shadow-card">
-      <h2 class="text-xl font-black text-ink">Usuarios por plan</h2>
+      <h2 class="text-xl font-black text-ink"><%= t("admin.users_by_plan") %></h2>
       <div class="mt-5 space-y-3">
         <% @plans.each do |plan| %>
           <% count = @stats[:users_by_plan][plan.key] || 0 %>
@@ -62,12 +62,12 @@
     </article>
 
     <article class="rounded-lg border border-line bg-white/80 p-5 shadow-card">
-      <h2 class="text-xl font-black text-ink">Estados de suscripción</h2>
+      <h2 class="text-xl font-black text-ink"><%= t("admin.subscription_statuses") %></h2>
       <div class="mt-5 space-y-3">
         <% User::SUBSCRIPTION_STATUSES.each do |status| %>
           <% count = @stats[:users_by_subscription_status][status] || 0 %>
           <div class="flex items-center justify-between gap-4 rounded-lg bg-cream px-4 py-3">
-            <span class="font-extrabold text-ink"><%= status %></span>
+            <span class="font-extrabold text-ink"><%= localized_status(status) %></span>
             <span class="text-muted"><%= number_with_delimiter(count) %></span>
           </div>
         <% end %>
@@ -75,12 +75,12 @@
     </article>
 
     <article class="rounded-lg border border-line bg-white/80 p-5 shadow-card">
-      <h2 class="text-xl font-black text-ink">Roles</h2>
+      <h2 class="text-xl font-black text-ink"><%= t("admin.roles") %></h2>
       <div class="mt-5 space-y-3">
         <% User.roles.keys.each do |role| %>
           <% count = @stats[:users_by_role][role] || 0 %>
           <div class="flex items-center justify-between gap-4 rounded-lg bg-cream px-4 py-3">
-            <span class="font-extrabold text-ink"><%= role.humanize %></span>
+            <span class="font-extrabold text-ink"><%= localized_role(role) %></span>
             <span class="text-muted"><%= number_with_delimiter(count) %></span>
           </div>
         <% end %>
@@ -89,15 +89,15 @@
   </section>
 
   <section class="mt-8 rounded-lg border border-line bg-white/80 p-5 shadow-card">
-    <h2 class="text-xl font-black text-ink">Últimos usuarios</h2>
+    <h2 class="text-xl font-black text-ink"><%= t("admin.latest_users") %></h2>
     <div class="mt-5 overflow-x-auto">
       <table class="w-full min-w-[720px] text-left text-sm">
         <thead class="bg-cream text-xs font-black uppercase text-muted">
           <tr>
-            <th class="px-4 py-3">Usuario</th>
-            <th class="px-4 py-3">Rol</th>
-            <th class="px-4 py-3">Plan</th>
-            <th class="px-4 py-3">Alta</th>
+            <th class="px-4 py-3"><%= t("admin.user") %></th>
+            <th class="px-4 py-3"><%= t("admin.role") %></th>
+            <th class="px-4 py-3"><%= t("admin.plan") %></th>
+            <th class="px-4 py-3"><%= t("admin.joined_label") %></th>
           </tr>
         </thead>
         <tbody class="divide-y divide-line">
@@ -107,8 +107,8 @@
                 <p class="font-extrabold text-ink"><%= user.email %></p>
                 <p class="text-muted"><%= user.display_name %></p>
               </td>
-              <td class="px-4 py-4 text-muted"><%= user.role.humanize %></td>
-              <td class="px-4 py-4 text-muted"><%= user.current_plan %> · <%= user.subscription_status %></td>
+              <td class="px-4 py-4 text-muted"><%= localized_role(user.role) %></td>
+              <td class="px-4 py-4 text-muted"><%= (Billing::PlanCatalog.find(user.current_plan) || Billing::PlanCatalog.find!("free")).name %> · <%= localized_status(user.subscription_status) %></td>
               <td class="px-4 py-4 text-muted"><%= l(user.created_at.to_date, format: :default) %></td>
             </tr>
           <% end %>

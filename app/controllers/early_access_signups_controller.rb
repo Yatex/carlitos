@@ -4,9 +4,9 @@ class EarlyAccessSignupsController < ApplicationController
 
     if @early_access_signup.save
       TransactionalEmail.early_access_confirmation(@early_access_signup)
-      redirect_to root_path(anchor: "early-access"), notice: "Listo. Te avisamos cuando Carlitos esté listo para probar."
+      redirect_to root_path(anchor: "early-access"), notice: t("flash.early_access.success")
     else
-      flash.now[:alert] = "Revisá el email para sumarte al acceso anticipado."
+      flash.now[:alert] = t("flash.early_access.invalid")
       render "home/index", status: :unprocessable_entity
     end
   end

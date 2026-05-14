@@ -21,7 +21,7 @@ class IntegrationConnectionsController < ApplicationController
       metadata: {}
     )
 
-    redirect_to settings_path, notice: "#{Integrations::Catalog.fetch(params[:provider])[:name]} desconectado."
+    redirect_to settings_path, notice: t("flash.integrations.disconnected", name: Integrations::Catalog.fetch(params[:provider])[:name])
   end
 
   private
@@ -29,7 +29,7 @@ class IntegrationConnectionsController < ApplicationController
   def validate_provider!
     return if Integrations::Catalog.providers.include?(params[:provider])
 
-    redirect_to settings_path, alert: "Integración no reconocida."
+    redirect_to settings_path, alert: t("flash.integrations.unknown")
   end
 
   def google_provider?
@@ -48,7 +48,7 @@ class IntegrationConnectionsController < ApplicationController
           "requested_scopes" => service.scopes
         }
       )
-      redirect_to settings_path, alert: "Configurá GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET para conectar #{Integrations::Catalog.fetch(params[:provider])[:name]}."
+      redirect_to settings_path, alert: t("flash.integrations.google_missing_config", name: Integrations::Catalog.fetch(params[:provider])[:name])
       return
     end
 

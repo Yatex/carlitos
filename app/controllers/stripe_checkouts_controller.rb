@@ -13,7 +13,7 @@ class StripeCheckoutsController < ApplicationController
     if session[:url].present?
       redirect_to session[:url], allow_other_host: true
     else
-      redirect_to billing_path, alert: session[:error] || "No pudimos iniciar Stripe Checkout."
+      redirect_to billing_path, alert: session[:error] || t("flash.stripe.checkout_failed")
     end
   end
 end

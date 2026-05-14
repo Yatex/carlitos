@@ -18,7 +18,7 @@ class MemoryListsController < ApplicationController
     @memory_list = current_user.memory_lists.new(memory_list_params)
 
     if @memory_list.save
-      redirect_back fallback_location: memory_lists_path, notice: "Lista creada."
+      redirect_back fallback_location: memory_lists_path, notice: t("flash.memory_lists.created")
     else
       redirect_back fallback_location: dashboard_path, alert: @memory_list.errors.full_messages.to_sentence
     end

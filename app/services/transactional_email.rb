@@ -1,29 +1,31 @@
 class TransactionalEmail
   class << self
     def welcome(user)
+      escaped_name = ERB::Util.html_escape(user.display_name)
       ResendClient.new.send_email(
         to: user.email,
-        subject: "Bienvenido a Carlitos",
-        html: "<p>Hola #{ERB::Util.html_escape(user.display_name)},</p><p>Carlitos ya está listo para ayudarte a recordar menos cosas de memoria.</p>",
-        text: "Hola #{user.display_name}, Carlitos ya está listo para ayudarte a recordar menos cosas de memoria."
+        subject: I18n.t("emails.welcome.subject"),
+        html: I18n.t("emails.welcome.html", name: escaped_name),
+        text: I18n.t("emails.welcome.text", name: user.display_name)
       )
     end
 
     def password_reset(user, reset_url)
+      escaped_url = ERB::Util.html_escape(reset_url)
       ResendClient.new.send_email(
         to: user.email,
-        subject: "Recuperá tu contraseña de Carlitos",
-        html: "<p>Usá este enlace para crear una nueva contraseña:</p><p><a href=\"#{ERB::Util.html_escape(reset_url)}\">Cambiar contraseña</a></p>",
-        text: "Usá este enlace para crear una nueva contraseña: #{reset_url}"
+        subject: I18n.t("emails.password_reset.subject"),
+        html: I18n.t("emails.password_reset.html", url: escaped_url),
+        text: I18n.t("emails.password_reset.text", url: reset_url)
       )
     end
 
     def early_access_confirmation(signup)
       ResendClient.new.send_email(
         to: signup.email,
-        subject: "Te sumamos al acceso anticipado de Carlitos",
-        html: "<p>Gracias por querer probar Carlitos. Te vamos a avisar cuando abramos el acceso.</p>",
-        text: "Gracias por querer probar Carlitos. Te vamos a avisar cuando abramos el acceso."
+        subject: I18n.t("emails.early_access.subject"),
+        html: I18n.t("emails.early_access.html"),
+        text: I18n.t("emails.early_access.text")
       )
     end
   end

@@ -1,14 +1,14 @@
-<% content_for :title, "Memoria — Carlitos" %>
+<% content_for :title, t("resources.notes.title") %>
 
 <%= render "shared/app_header" %>
 
 <main class="mx-auto max-w-6xl px-5 py-10 sm:px-6 lg:px-8">
   <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
     <div>
-      <p class="text-sm font-black uppercase text-ocean">Memoria</p>
-      <h1 class="mt-2 text-4xl font-black text-ink">Notas guardadas</h1>
+      <p class="text-sm font-black uppercase text-ocean"><%= t("resources.notes.heading") %></p>
+      <h1 class="mt-2 text-4xl font-black text-ink"><%= t("resources.notes.index_headline") %></h1>
     </div>
-    <%= link_to "Nueva nota", new_memory_note_path, class: "rounded-full bg-ocean px-5 py-3 font-extrabold text-white shadow-card" %>
+    <%= link_to t("resources.notes.new"), new_memory_note_path, class: "rounded-full bg-ocean px-5 py-3 font-extrabold text-white shadow-card" %>
   </div>
 
   <section class="mt-8 grid gap-5 md:grid-cols-2">
@@ -20,7 +20,7 @@
       </article>
     <% end %>
     <% if @memory_notes.empty? %>
-      <div class="rounded-lg border border-line bg-white/80 p-8 text-muted shadow-card md:col-span-2">Todavía no hay notas guardadas.</div>
+      <div class="rounded-lg border border-line bg-white/80 p-8 text-muted shadow-card md:col-span-2"><%= t("resources.notes.empty_saved") %></div>
     <% end %>
   </section>
 </main>

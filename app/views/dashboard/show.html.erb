@@ -1,111 +1,111 @@
-<% content_for :title, "Dashboard — Carlitos" %>
+<% content_for :title, t("dashboard.title") %>
 
 <%= render "shared/app_header" %>
 
 <main class="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
   <section class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
     <div class="rounded-lg border border-line bg-white/80 p-6 shadow-soft">
-      <p class="text-sm font-black uppercase text-ocean">Tu memoria</p>
+      <p class="text-sm font-black uppercase text-ocean"><%= t("dashboard.memory_eyebrow") %></p>
       <h1 class="mt-3 text-4xl font-black leading-tight text-ink sm:text-5xl">
-        Hola, <%= current_user.display_name %>.
+        <%= t("dashboard.greeting", name: current_user.display_name) %>
       </h1>
       <p class="mt-4 max-w-2xl text-lg leading-8 text-muted">
-        Acá vive lo que le pedís a Carlitos: recordatorios, listas, notas y próximos briefings.
+        <%= t("dashboard.intro") %>
       </p>
     </div>
 
     <div class="rounded-lg border border-line bg-ink p-6 text-white shadow-soft">
-      <p class="text-sm font-black uppercase text-sun">Suscripción</p>
+      <p class="text-sm font-black uppercase text-sun"><%= t("dashboard.subscription") %></p>
       <p class="mt-4 text-3xl font-black"><%= Billing::PlanCatalog.current_for(current_user).name %></p>
-      <p class="mt-2 text-white/70">Estado: <%= current_user.subscription_status %></p>
+      <p class="mt-2 text-white/70"><%= t("dashboard.status", status: localized_status(current_user.subscription_status)) %></p>
       <% if current_user.free_trial_active? %>
-        <p class="mt-2 text-sm text-white/70">Te quedan <%= current_user.trial_days_remaining %> días de prueba.</p>
+        <p class="mt-2 text-sm text-white/70"><%= t("dashboard.trial_remaining", count: current_user.trial_days_remaining) %></p>
       <% elsif current_user.free_trial_expired? %>
-        <p class="mt-2 text-sm text-sun">Tu prueba gratis terminó.</p>
+        <p class="mt-2 text-sm text-sun"><%= t("dashboard.trial_expired") %></p>
       <% elsif current_user.plan_expires_at.present? %>
-        <p class="mt-2 text-sm text-white/70">Acceso hasta <%= l(current_user.plan_expires_at.to_date, format: :default) %>.</p>
+        <p class="mt-2 text-sm text-white/70"><%= t("dashboard.access_until", date: l(current_user.plan_expires_at.to_date, format: :default)) %></p>
       <% end %>
-      <%= link_to "Gestionar billing", billing_path, class: "mt-6 inline-flex rounded-full bg-white px-5 py-3 font-extrabold text-ink transition hover:bg-sun" %>
+      <%= link_to t("buttons.manage_billing"), billing_path, class: "mt-6 inline-flex rounded-full bg-white px-5 py-3 font-extrabold text-ink transition hover:bg-sun" %>
     </div>
   </section>
 
   <section class="mt-6 grid gap-6 lg:grid-cols-4">
     <article class="rounded-lg border border-line bg-white/80 p-5 shadow-card lg:col-span-1">
-      <h2 class="text-lg font-black text-ink">Crear recordatorio</h2>
+      <h2 class="text-lg font-black text-ink"><%= t("dashboard.create_reminder") %></h2>
       <%= form_with model: @reminder, class: "mt-4 space-y-3" do |form| %>
-        <%= form.text_field :title, placeholder: "Pagar alquiler", class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+        <%= form.text_field :title, placeholder: t("dashboard.reminder_placeholder"), class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
         <%= form.datetime_local_field :remind_at, class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-        <%= form.text_area :body, rows: 3, placeholder: "Detalles opcionales", class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-        <%= form.submit "Crear", class: "w-full cursor-pointer rounded-full bg-ocean px-4 py-3 font-extrabold text-white" %>
+        <%= form.text_area :body, rows: 3, placeholder: t("dashboard.reminder_body_placeholder"), class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+        <%= form.submit t("buttons.create"), class: "w-full cursor-pointer rounded-full bg-ocean px-4 py-3 font-extrabold text-white" %>
       <% end %>
     </article>
 
     <article class="rounded-lg border border-line bg-white/80 p-5 shadow-card lg:col-span-1">
-      <h2 class="text-lg font-black text-ink">Crear lista</h2>
+      <h2 class="text-lg font-black text-ink"><%= t("dashboard.create_list") %></h2>
       <%= form_with model: @memory_list, class: "mt-4 space-y-3" do |form| %>
-        <%= form.text_field :title, placeholder: "Súper", class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-        <%= form.submit "Crear lista", class: "w-full cursor-pointer rounded-full bg-ocean px-4 py-3 font-extrabold text-white" %>
+        <%= form.text_field :title, placeholder: t("dashboard.list_placeholder"), class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+        <%= form.submit t("dashboard.create_list"), class: "w-full cursor-pointer rounded-full bg-ocean px-4 py-3 font-extrabold text-white" %>
       <% end %>
     </article>
 
     <article class="rounded-lg border border-line bg-white/80 p-5 shadow-card lg:col-span-1">
-      <h2 class="text-lg font-black text-ink">Guardar nota</h2>
+      <h2 class="text-lg font-black text-ink"><%= t("dashboard.save_note") %></h2>
       <%= form_with model: @memory_note, class: "mt-4 space-y-3" do |form| %>
-        <%= form.text_field :title, placeholder: "DNI vence en agosto", class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-        <%= form.text_area :content, rows: 3, placeholder: "Lo que querés recordar", class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-        <%= form.submit "Guardar", class: "w-full cursor-pointer rounded-full bg-ocean px-4 py-3 font-extrabold text-white" %>
+        <%= form.text_field :title, placeholder: t("dashboard.note_placeholder"), class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+        <%= form.text_area :content, rows: 3, placeholder: t("dashboard.note_body_placeholder"), class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+        <%= form.submit t("buttons.save"), class: "w-full cursor-pointer rounded-full bg-ocean px-4 py-3 font-extrabold text-white" %>
       <% end %>
     </article>
 
     <article class="rounded-lg border border-line bg-white/80 p-5 shadow-card lg:col-span-1">
-      <h2 class="text-lg font-black text-ink">Briefing diario</h2>
+      <h2 class="text-lg font-black text-ink"><%= t("dashboard.daily_briefing") %></h2>
       <%= form_with model: @daily_briefing, url: daily_briefing_path, method: :patch, class: "mt-4 space-y-3" do |form| %>
         <label class="flex items-center gap-3 text-sm font-bold text-ink">
           <%= form.check_box :enabled, class: "h-5 w-5 rounded border-line text-ocean" %>
-          Activar resumen
+          <%= t("dashboard.enable_summary") %>
         </label>
         <%= form.time_field :delivery_time, class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
         <%= form.select :timezone, iana_time_zone_options(@daily_briefing.timezone), {}, class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-        <%= form.submit "Configurar", class: "w-full cursor-pointer rounded-full bg-ocean px-4 py-3 font-extrabold text-white" %>
+        <%= form.submit t("dashboard.configure"), class: "w-full cursor-pointer rounded-full bg-ocean px-4 py-3 font-extrabold text-white" %>
       <% end %>
     </article>
   </section>
 
   <section class="mt-6 grid gap-6 lg:grid-cols-4">
     <article class="rounded-lg border border-line bg-white/80 p-6 shadow-card">
-      <h2 class="text-xl font-black text-ink">Recordatorios recientes</h2>
+      <h2 class="text-xl font-black text-ink"><%= t("dashboard.recent_reminders") %></h2>
       <div class="mt-4 space-y-3">
         <% if @recent_reminders.any? %>
           <% @recent_reminders.each do |reminder| %>
             <div class="rounded-lg bg-cream p-4">
               <p class="font-black text-ink"><%= reminder.title %></p>
-              <p class="mt-1 text-sm text-muted"><%= reminder.remind_at ? l(reminder.remind_at, format: :short) : "Sin fecha" %></p>
+              <p class="mt-1 text-sm text-muted"><%= reminder.remind_at ? l(reminder.remind_at, format: :short) : t("dashboard.no_date") %></p>
             </div>
           <% end %>
         <% else %>
-          <p class="text-muted">Todavía no hay recordatorios.</p>
+          <p class="text-muted"><%= t("dashboard.no_reminders") %></p>
         <% end %>
       </div>
     </article>
 
     <article class="rounded-lg border border-line bg-white/80 p-6 shadow-card">
-      <h2 class="text-xl font-black text-ink">Listas recientes</h2>
+      <h2 class="text-xl font-black text-ink"><%= t("dashboard.recent_lists") %></h2>
       <div class="mt-4 space-y-3">
         <% if @recent_lists.any? %>
           <% @recent_lists.each do |list| %>
             <%= link_to memory_list_path(list), class: "block rounded-lg bg-cream p-4 transition hover:text-ocean" do %>
               <p class="font-black text-ink"><%= list.title %></p>
-              <p class="mt-1 text-sm text-muted"><%= pluralize(list.memory_list_items.size, "ítem") %></p>
+              <p class="mt-1 text-sm text-muted"><%= "#{list.memory_list_items.size} #{t("dashboard.item", count: list.memory_list_items.size)}" %></p>
             <% end %>
           <% end %>
         <% else %>
-          <p class="text-muted">Todavía no hay listas.</p>
+          <p class="text-muted"><%= t("dashboard.no_lists") %></p>
         <% end %>
       </div>
     </article>
 
     <article class="rounded-lg border border-line bg-white/80 p-6 shadow-card">
-      <h2 class="text-xl font-black text-ink">Notas recientes</h2>
+      <h2 class="text-xl font-black text-ink"><%= t("dashboard.recent_notes") %></h2>
       <div class="mt-4 space-y-3">
         <% if @recent_notes.any? %>
           <% @recent_notes.each do |note| %>
@@ -115,23 +115,23 @@
             </div>
           <% end %>
         <% else %>
-          <p class="text-muted">Todavía no hay notas.</p>
+          <p class="text-muted"><%= t("dashboard.no_notes") %></p>
         <% end %>
       </div>
     </article>
 
     <article class="rounded-lg border border-line bg-white/80 p-6 shadow-card">
-      <h2 class="text-xl font-black text-ink">Actividad del asistente</h2>
+      <h2 class="text-xl font-black text-ink"><%= t("dashboard.assistant_activity") %></h2>
       <div class="mt-4 space-y-3">
         <% if @recent_activity.any? %>
           <% @recent_activity.each do |message| %>
             <div class="rounded-lg bg-cream p-4">
-              <p class="text-xs font-black uppercase text-ocean"><%= message.channel %> · <%= message.direction %></p>
+              <p class="text-xs font-black uppercase text-ocean"><%= localized_assistant_channel(message.channel) %> · <%= localized_assistant_direction(message.direction) %></p>
               <p class="mt-1 text-sm text-muted"><%= message.body.truncate(100) %></p>
             </div>
           <% end %>
         <% else %>
-          <p class="text-muted">La actividad de WhatsApp y AI aparecerá acá cuando conectes canales.</p>
+          <p class="text-muted"><%= t("dashboard.no_activity") %></p>
         <% end %>
       </div>
     </article>

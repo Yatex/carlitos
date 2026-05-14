@@ -1,14 +1,14 @@
-<% content_for :title, "Nueva nota — Carlitos" %>
+<% content_for :title, t("resources.notes.create_title") %>
 
 <%= render "shared/app_header" %>
 
 <main class="mx-auto max-w-3xl px-5 py-10 sm:px-6 lg:px-8">
-  <h1 class="text-4xl font-black text-ink">Nueva nota</h1>
+  <h1 class="text-4xl font-black text-ink"><%= t("resources.notes.new") %></h1>
   <section class="mt-8 rounded-lg border border-line bg-white/80 p-6 shadow-card">
     <%= form_with model: @memory_note, class: "space-y-5" do |form| %>
-      <%= form.text_field :title, placeholder: "Título", class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-      <%= form.text_area :content, rows: 7, placeholder: "Algo que querés recordar después", class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-      <%= form.submit "Guardar nota", class: "cursor-pointer rounded-full bg-ocean px-6 py-3 font-extrabold text-white" %>
+      <%= form.text_field :title, placeholder: t("resources.notes.title_placeholder_short"), class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+      <%= form.text_area :content, rows: 7, placeholder: t("resources.notes.content_placeholder_later"), class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+      <%= form.submit t("resources.notes.submit"), class: "cursor-pointer rounded-full bg-ocean px-6 py-3 font-extrabold text-white" %>
     <% end %>
   </section>
 </main>

@@ -1,37 +1,37 @@
-<% content_for :title, "Iniciar sesión — Carlitos" %>
+<% content_for :title, t("auth.login_title") %>
 
 <%= render "shared/public_header" %>
 
 <main class="mx-auto grid min-h-[calc(100vh-80px)] max-w-5xl items-center px-5 py-16 sm:px-6 lg:px-8">
   <section class="mx-auto w-full max-w-lg rounded-lg border border-line bg-white/80 p-6 shadow-soft sm:p-8">
-    <p class="text-sm font-black uppercase text-ocean">Bienvenido de nuevo</p>
-    <h1 class="mt-3 text-3xl font-black text-ink">Iniciá sesión</h1>
+    <p class="text-sm font-black uppercase text-ocean"><%= t("auth.welcome_back") %></p>
+    <h1 class="mt-3 text-3xl font-black text-ink"><%= t("auth.sign_in") %></h1>
 
     <div class="mt-8">
-      <%= render "shared/google_auth_button", intent: "login", label: "Entrar con Google" %>
+      <%= render "shared/google_auth_button", intent: "login", label: t("auth.sign_in_google") %>
     </div>
 
     <div class="mt-6 flex items-center gap-3 text-xs font-black uppercase text-muted">
       <span class="h-px flex-1 bg-line"></span>
-      <span>o con email</span>
+      <span><%= t("auth.or_email") %></span>
       <span class="h-px flex-1 bg-line"></span>
     </div>
 
     <%= form_with url: login_path, class: "mt-6 space-y-5" do |form| %>
       <div>
-        <%= form.label :email, "Email", class: "block text-sm font-black text-ink" %>
+        <%= form.label :email, t("auth.email"), class: "block text-sm font-black text-ink" %>
         <%= form.email_field :email, required: true, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-4 outline-none focus:border-ocean focus:ring-4 focus:ring-ocean/10" %>
       </div>
       <div>
-        <%= form.label :password, "Contraseña", class: "block text-sm font-black text-ink" %>
+        <%= form.label :password, t("auth.password"), class: "block text-sm font-black text-ink" %>
         <%= form.password_field :password, required: true, class: "mt-2 w-full rounded-lg border border-line bg-cream px-4 py-4 outline-none focus:border-ocean focus:ring-4 focus:ring-ocean/10" %>
       </div>
-      <%= form.submit "Entrar", class: "w-full cursor-pointer rounded-full bg-ocean px-6 py-4 font-extrabold text-white shadow-card transition hover:bg-ink" %>
+      <%= form.submit t("auth.sign_in"), class: "w-full cursor-pointer rounded-full bg-ocean px-6 py-4 font-extrabold text-white shadow-card transition hover:bg-ink" %>
     <% end %>
 
     <div class="mt-6 flex flex-col gap-2 text-sm text-muted sm:flex-row sm:justify-between">
-      <%= link_to "Crear cuenta", signup_path, class: "font-black text-ocean" %>
-      <%= link_to "Olvidé mi contraseña", new_password_reset_path, class: "font-black text-ocean" %>
+      <%= link_to t("auth.create_account"), signup_path, class: "font-black text-ocean" %>
+      <%= link_to t("auth.forgot_password"), new_password_reset_path, class: "font-black text-ocean" %>
     </div>
   </section>
 </main>

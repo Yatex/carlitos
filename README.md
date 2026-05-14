@@ -146,7 +146,13 @@ Admin sections:
 
 ## Plans and Trials
 
-The Free plan is not permanent access. New accounts automatically receive a 14-day Free trial on first signup, whether they register with email/password or Google.
+The Free plan is not permanent access. New accounts automatically receive a 14-day Pro trial on first signup, whether they register with email/password or Google.
+
+Current public plans:
+
+- Free: automatic 14-day Pro trial.
+- Pro: USD 15/month for one personal memory assistant.
+- Family: USD 39/month for up to 5 people, with shared family memory plus private notes, lists, and reminders per member.
 
 Trial fields on `User`:
 
@@ -154,7 +160,7 @@ Trial fields on `User`:
 - `free_trial_ends_at`
 - `plan_expires_at`
 
-Admins can manually extend paid plans such as Pro or Family/Team from `/admin/users`. Free trial access is only activated automatically when the account is first created.
+Admins can manually extend paid plans such as Pro or Family from `/admin/users`. Free trial access is only activated automatically when the account is first created.
 
 ## Settings Integrations
 
@@ -209,12 +215,11 @@ Set:
 STRIPE_SECRET_KEY=
 STRIPE_PUBLISHABLE_KEY=
 STRIPE_WEBHOOK_SECRET=
-STRIPE_PRICE_FREE=
 STRIPE_PRICE_PRO=
 STRIPE_PRICE_FAMILY=
 ```
 
-Do not commit real price IDs or keys. Billing plans are defined in `Billing::PlanCatalog`; Stripe Checkout reads `STRIPE_PRICE_PRO` for Pro and is prepared for `STRIPE_PRICE_FAMILY` when that plan is enabled.
+Do not commit real price IDs or keys. Billing plans are defined in `Billing::PlanCatalog`; Stripe Checkout reads `STRIPE_PRICE_PRO` for Pro and `STRIPE_PRICE_FAMILY` for Family. Free is an automatic Pro trial and does not use Stripe Checkout.
 
 Local webhook testing with Stripe CLI:
 

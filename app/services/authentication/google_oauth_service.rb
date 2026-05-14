@@ -27,7 +27,7 @@ module Authentication
     end
 
     def exchange_code(code, callback_url:)
-      return { ok: false, error: "Google OAuth no está configurado." } unless configured?
+      return { ok: false, error: I18n.t("auth_services.google.not_configured") } unless configured?
 
       uri = URI(TOKEN_URL)
       request = Net::HTTP::Post.new(uri)
@@ -45,7 +45,7 @@ module Authentication
       if response.is_a?(Net::HTTPSuccess)
         { ok: true, access_token: body["access_token"], token_response: body }
       else
-        { ok: false, error: body.dig("error_description") || body["error"] || "Google respondió #{response.code}." }
+        { ok: false, error: body.dig("error_description") || body["error"] || I18n.t("auth_services.google.response", code: response.code) }
       end
     rescue StandardError => e
       Rails.logger.warn("[Google Auth] Token exchange failed: #{e.class} #{e.message}")
@@ -53,7 +53,7 @@ module Authentication
     end
 
     def fetch_userinfo(access_token)
-      return { ok: false, error: "Google no devolvió access token." } if access_token.blank?
+      return { ok: false, error: I18n.t("auth_services.google.missing_token") } if access_token.blank?
 
       uri = URI(USERINFO_URL)
       request = Net::HTTP::Get.new(uri)
@@ -65,7 +65,7 @@ module Authentication
       if response.is_a?(Net::HTTPSuccess)
         { ok: true, profile: body }
       else
-        { ok: false, error: body["error_description"] || body["error"] || "Google userinfo respondió #{response.code}." }
+        { ok: false, error: body["error_description"] || body["error"] || I18n.t("auth_services.google.userinfo_response", code: response.code) }
       end
     rescue StandardError => e
       Rails.logger.warn("[Google Auth] Userinfo failed: #{e.class} #{e.message}")

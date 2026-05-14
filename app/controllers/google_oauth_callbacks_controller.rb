@@ -3,17 +3,17 @@ class GoogleOauthCallbacksController < ApplicationController
 
   def show
     state = Integrations::GoogleOauthService.decode_state(params[:state])&.with_indifferent_access
-    return redirect_to(settings_path, alert: "No pudimos validar la conexión con Google.") unless valid_state?(state)
+    return redirect_to(settings_path, alert: t("flash.integrations.google_invalid_state")) unless valid_state?(state)
 
     service = Integrations::GoogleOauthService.new(user: current_user, provider: state["provider"])
     result = service.exchange_code(params[:code], callback_url: google_oauth_callback_url)
 
     if result[:ok]
       connect_provider(state["provider"], result[:body])
-      redirect_to settings_path, notice: "#{Integrations::Catalog.fetch(state['provider'])[:name]} conectado."
+      redirect_to settings_path, notice: t("flash.integrations.google_connected", name: Integrations::Catalog.fetch(state["provider"])[:name])
     else
       mark_provider_error(state["provider"], result[:error])
-      redirect_to settings_path, alert: "Google no pudo completar la conexión: #{result[:error]}"
+      redirect_to settings_path, alert: t("flash.integrations.google_failed", error: result[:error])
     end
   end
 

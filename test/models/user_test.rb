@@ -1,7 +1,7 @@
 require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
-  test "new users start with a 14 day free trial" do
+  test "new users start with a 14 day Pro trial" do
     user = User.create!(
       name: "Trial User",
       email: "trial-user@example.com",
@@ -13,11 +13,13 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "free", user.current_plan
     assert_equal "trialing", user.subscription_status
     assert user.free_trial_active?
+    assert user.pro_trial?
+    assert user.pro_access?
     assert_in_delta 14.days.from_now.to_i, user.free_trial_ends_at.to_i, 5
     assert_equal user.free_trial_ends_at.to_i, user.plan_expires_at.to_i
   end
 
-  test "paid users created directly do not receive a free trial" do
+  test "paid users created directly do not receive a Pro trial" do
     user = User.create!(
       name: "Paid User",
       email: "paid-user@example.com",

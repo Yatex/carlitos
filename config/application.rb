@@ -24,6 +24,7 @@ module Carlitos
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.time_zone = "America/Montevideo"
+    config.i18n.available_locales = %i[es en]
     config.i18n.default_locale = :es
   end
 end

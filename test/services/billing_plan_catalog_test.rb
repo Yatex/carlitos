@@ -15,4 +15,12 @@ class BillingPlanCatalogTest < ActiveSupport::TestCase
     assert_not plan.paid?
     assert_not plan.checkoutable?
   end
+
+  test "family plan is available for checkout when configured" do
+    plan = Billing::PlanCatalog.find!("family")
+
+    assert_equal "Familia", plan.name
+    assert plan.checkoutable?
+    assert_equal "STRIPE_PRICE_FAMILY", plan.stripe_price_env
+  end
 end

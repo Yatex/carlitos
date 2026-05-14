@@ -10,9 +10,9 @@ module Assistant
         query = @arguments["query"].to_s
         notes = @user.memory_notes.where("title ILIKE :q OR content ILIKE :q", q: "%#{query}%").limit(5)
         message = if notes.any?
-                    "Encontré esto: #{notes.map(&:title).to_sentence}."
+                    I18n.t("assistant.actions.search_memory.found", titles: notes.map(&:title).to_sentence)
                   else
-                    "No encontré nada con esa búsqueda todavía."
+                    I18n.t("assistant.actions.search_memory.not_found")
                   end
 
         ActionResult.new(success: true, message:, record: notes)

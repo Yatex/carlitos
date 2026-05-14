@@ -5,7 +5,7 @@ class AccountsController < ApplicationController
 
   def update
     if current_user.update(account_params)
-      redirect_to edit_account_path, notice: "Cuenta actualizada."
+      redirect_to edit_account_path, notice: t("flash.account.updated")
     else
       render :edit, status: :unprocessable_entity
     end

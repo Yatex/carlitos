@@ -11,19 +11,19 @@ class PasswordResetsController < ApplicationController
       TransactionalEmail.password_reset(user, edit_password_reset_url(user.password_reset_token))
     end
 
-    redirect_to login_path, notice: "Si el email existe, te enviamos instrucciones para recuperar la contraseña."
+    redirect_to login_path, notice: t("flash.password_resets.sent")
   end
 
   def edit
-    redirect_to new_password_reset_path, alert: "El enlace expiró. Pedí uno nuevo." if @user.password_reset_expired?
+    redirect_to new_password_reset_path, alert: t("flash.password_resets.expired") if @user.password_reset_expired?
   end
 
   def update
     if @user.password_reset_expired?
-      redirect_to new_password_reset_path, alert: "El enlace expiró. Pedí uno nuevo."
+      redirect_to new_password_reset_path, alert: t("flash.password_resets.expired")
     elsif @user.update(password_params.merge(password_reset_sent_at: nil))
       @user.regenerate_password_reset_token
-      redirect_to login_path, notice: "Contraseña actualizada. Ya podés iniciar sesión."
+      redirect_to login_path, notice: t("flash.password_resets.updated")
     else
       render :edit, status: :unprocessable_entity
     end

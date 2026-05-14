@@ -14,7 +14,7 @@ class RemindersController < ApplicationController
     @reminder = current_user.reminders.new(reminder_params)
 
     if @reminder.save
-      redirect_back fallback_location: dashboard_path, notice: "Recordatorio creado."
+      redirect_back fallback_location: dashboard_path, notice: t("flash.reminders.created")
     else
       redirect_back fallback_location: dashboard_path, alert: @reminder.errors.full_messages.to_sentence
     end
@@ -22,7 +22,7 @@ class RemindersController < ApplicationController
 
   def update
     if @reminder.update(reminder_params)
-      redirect_back fallback_location: reminders_path, notice: "Recordatorio actualizado."
+      redirect_back fallback_location: reminders_path, notice: t("flash.reminders.updated")
     else
       redirect_back fallback_location: reminders_path, alert: @reminder.errors.full_messages.to_sentence
     end

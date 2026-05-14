@@ -6,7 +6,7 @@ class WhatsappInboundProcessor
 
   def process
     user = resolve_user
-    return { response: "Hola, soy Carlitos. Todavía necesito vincular este WhatsApp con tu cuenta." } unless user
+    return { response: I18n.t("whatsapp.inbound.unlinked") } unless user
 
     body = @payload["Body"].to_s.strip
     user.assistant_messages.create!(
@@ -29,7 +29,7 @@ class WhatsappInboundProcessor
     { response: result.message }
   rescue StandardError => e
     Rails.logger.warn("[WhatsApp] Inbound processing failed: #{e.class} #{e.message}")
-    { response: "Tuve un problema procesando ese mensaje. Probá de nuevo en unos minutos." }
+    { response: I18n.t("whatsapp.inbound.failed") }
   end
 
   private

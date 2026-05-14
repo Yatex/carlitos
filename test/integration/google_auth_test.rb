@@ -19,7 +19,7 @@ class GoogleAuthTest < ActionDispatch::IntegrationTest
     get google_auth_path(intent: "login")
 
     assert_redirected_to login_path
-    assert_equal "Google login todavía no está configurado.", flash[:alert]
+    assert_equal I18n.t("flash.google_auth.not_configured", locale: :es), flash[:alert]
   ensure
     ENV["GOOGLE_CLIENT_ID"] = old_client_id if old_client_id
     ENV["GOOGLE_CLIENT_SECRET"] = old_client_secret if old_client_secret

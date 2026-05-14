@@ -6,13 +6,18 @@
     <% end %>
 
     <div class="hidden items-center gap-6 text-sm md:flex">
-      <%= nav_link_to "Dashboard", dashboard_path %>
-      <%= nav_link_to "Recordatorios", reminders_path %>
-      <%= nav_link_to "Listas", memory_lists_path %>
-      <%= nav_link_to "Memoria", memory_notes_path %>
+      <%= nav_link_to t("nav.dashboard"), dashboard_path %>
+      <%= nav_link_to t("nav.reminders"), reminders_path %>
+      <%= nav_link_to t("nav.lists"), memory_lists_path %>
+      <%= nav_link_to t("nav.memory"), memory_notes_path %>
     </div>
 
     <div class="flex items-center gap-3">
+      <div class="hidden items-center rounded-full border border-line bg-white p-1 text-xs font-black shadow-card sm:flex" aria-label="<%= t("locale.switch_label") %>">
+        <% I18n.available_locales.each do |locale| %>
+          <%= link_to t("locale.#{locale}"), language_switch_path(locale), class: "rounded-full px-2.5 py-1 transition #{I18n.locale == locale ? "bg-ink text-white" : "text-muted hover:text-ocean"}" %>
+        <% end %>
+      </div>
       <details class="relative">
         <summary class="flex cursor-pointer list-none items-center gap-3 rounded-full border border-line bg-white px-4 py-2 text-sm font-bold text-ink shadow-card transition hover:text-ocean">
           <span class="grid h-8 w-8 place-items-center rounded-full bg-ocean/10 text-xs font-black uppercase text-ocean"><%= current_user.display_name.first %></span>
@@ -25,17 +30,22 @@
             <p class="truncate text-xs text-muted"><%= current_user.email %></p>
           </div>
           <div class="p-2">
-            <%= link_to "Billing", billing_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
-            <%= link_to "Ajustes", settings_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
-            <%= link_to "Cuenta", edit_account_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
+            <div class="mb-2 flex rounded-lg bg-cream p-1 text-xs font-black sm:hidden" aria-label="<%= t("locale.switch_label") %>">
+              <% I18n.available_locales.each do |locale| %>
+                <%= link_to t("locale.#{locale}"), language_switch_path(locale), class: "flex-1 rounded-md px-2.5 py-1 text-center transition #{I18n.locale == locale ? "bg-ink text-white" : "text-muted hover:text-ocean"}" %>
+              <% end %>
+            </div>
+            <%= link_to t("nav.billing"), billing_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
+            <%= link_to t("nav.settings"), settings_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
+            <%= link_to t("nav.account"), edit_account_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
             <% if current_user.admin_like? %>
               <div class="my-2 h-px bg-line"></div>
-              <p class="px-3 py-1 text-[11px] font-black uppercase text-muted">Admin</p>
-              <%= link_to "Usuarios", admin_users_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
-              <%= link_to "Estadísticas", admin_analytics_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
+              <p class="px-3 py-1 text-[11px] font-black uppercase text-muted"><%= t("nav.admin") %></p>
+              <%= link_to t("nav.users"), admin_users_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
+              <%= link_to t("nav.analytics"), admin_analytics_path, class: "block rounded-lg px-3 py-2 text-sm font-bold text-ink transition hover:bg-cream hover:text-ocean" %>
             <% end %>
             <div class="my-2 h-px bg-line"></div>
-            <%= button_to "Salir", logout_path, method: :delete, class: "w-full rounded-lg px-3 py-2 text-left text-sm font-bold text-red-700 transition hover:bg-red-50" %>
+            <%= button_to t("nav.sign_out"), logout_path, method: :delete, class: "w-full rounded-lg px-3 py-2 text-left text-sm font-bold text-red-700 transition hover:bg-red-50" %>
           </div>
         </div>
       </details>

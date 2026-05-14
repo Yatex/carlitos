@@ -11,7 +11,7 @@ class RegistrationsController < ApplicationController
     if @user.save
       sign_in(@user)
       TransactionalEmail.welcome(@user)
-      redirect_to dashboard_path, notice: "Bienvenido a Carlitos."
+      redirect_to dashboard_path, notice: t("flash.registrations.welcome")
     else
       render :new, status: :unprocessable_entity
     end

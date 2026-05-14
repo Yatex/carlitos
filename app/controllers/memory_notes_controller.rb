@@ -13,7 +13,7 @@ class MemoryNotesController < ApplicationController
     @memory_note = current_user.memory_notes.new(memory_note_params.merge(source: "web"))
 
     if @memory_note.save
-      redirect_back fallback_location: memory_notes_path, notice: "Nota guardada en tu memoria."
+      redirect_back fallback_location: memory_notes_path, notice: t("flash.memory_notes.saved")
     else
       redirect_back fallback_location: dashboard_path, alert: @memory_note.errors.full_messages.to_sentence
     end

@@ -5,7 +5,7 @@ class GoogleAuthController < ApplicationController
     service = Authentication::GoogleOauthService.new
 
     unless service.configured?
-      redirect_to fallback_path, alert: "Google login todavía no está configurado."
+      redirect_to fallback_path, alert: t("flash.google_auth.not_configured")
       return
     end
 
@@ -19,20 +19,20 @@ class GoogleAuthController < ApplicationController
   def callback
     state = Authentication::GoogleOauthService.decode_state(params[:state])&.with_indifferent_access
     unless Authentication::GoogleOauthService.valid_state?(state)
-      redirect_to login_path, alert: "No pudimos validar el inicio con Google."
+      redirect_to login_path, alert: t("flash.google_auth.invalid_state")
       return
     end
 
     service = Authentication::GoogleOauthService.new
     token_result = service.exchange_code(params[:code], callback_url: google_auth_callback_url)
     unless token_result[:ok]
-      redirect_to auth_failure_path(state), alert: "Google no pudo completar el login: #{token_result[:error]}"
+      redirect_to auth_failure_path(state), alert: t("flash.google_auth.login_failed", error: token_result[:error])
       return
     end
 
     profile_result = service.fetch_userinfo(token_result[:access_token])
     unless profile_result[:ok]
-      redirect_to auth_failure_path(state), alert: "No pudimos leer tu perfil de Google: #{profile_result[:error]}"
+      redirect_to auth_failure_path(state), alert: t("flash.google_auth.profile_failed", error: profile_result[:error])
       return
     end
 
@@ -42,7 +42,7 @@ class GoogleAuthController < ApplicationController
     )
 
     sign_in(result.user)
-    redirect_to dashboard_path, notice: result.created ? "Cuenta creada con Google. Bienvenido a Carlitos." : "Sesión iniciada con Google."
+    redirect_to dashboard_path, notice: result.created ? t("flash.google_auth.created") : t("flash.google_auth.signed_in")
   rescue Authentication::GoogleAccountProvisioner::ProvisionError, ActiveRecord::RecordInvalid => e
     redirect_to auth_failure_path(state), alert: e.message
   end

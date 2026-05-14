@@ -1,25 +1,26 @@
-<% content_for :title, "Listas — Carlitos" %>
+<% content_for :title, t("resources.lists.title") %>
 
 <%= render "shared/app_header" %>
 
 <main class="mx-auto max-w-6xl px-5 py-10 sm:px-6 lg:px-8">
   <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
     <div>
-      <p class="text-sm font-black uppercase text-ocean">Listas</p>
-      <h1 class="mt-2 text-4xl font-black text-ink">Tus listas vivas</h1>
+      <p class="text-sm font-black uppercase text-ocean"><%= t("resources.lists.heading") %></p>
+      <h1 class="mt-2 text-4xl font-black text-ink"><%= t("resources.lists.index_headline") %></h1>
     </div>
-    <%= link_to "Nueva lista", new_memory_list_path, class: "rounded-full bg-ocean px-5 py-3 font-extrabold text-white shadow-card" %>
+    <%= link_to t("resources.lists.new"), new_memory_list_path, class: "rounded-full bg-ocean px-5 py-3 font-extrabold text-white shadow-card" %>
   </div>
 
   <section class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
     <% @memory_lists.each do |list| %>
       <%= link_to memory_list_path(list), class: "rounded-lg border border-line bg-white/80 p-6 shadow-card transition hover:-translate-y-0.5" do %>
         <h2 class="text-xl font-black text-ink"><%= list.title %></h2>
-        <p class="mt-2 text-sm text-muted"><%= pluralize(list.memory_list_items.open.size, "pendiente") %></p>
+        <% pending_count = list.memory_list_items.open.size %>
+        <p class="mt-2 text-sm text-muted"><%= "#{pending_count} #{t("resources.lists.pending", count: pending_count)}" %></p>
       <% end %>
     <% end %>
     <% if @memory_lists.empty? %>
-      <div class="rounded-lg border border-line bg-white/80 p-8 text-muted shadow-card md:col-span-2 lg:col-span-3">Todavía no hay listas.</div>
+      <div class="rounded-lg border border-line bg-white/80 p-8 text-muted shadow-card md:col-span-2 lg:col-span-3"><%= t("resources.lists.empty") %></div>
     <% end %>
   </section>
 </main>

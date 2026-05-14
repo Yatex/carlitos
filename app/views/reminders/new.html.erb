@@ -1,15 +1,15 @@
-<% content_for :title, "Nuevo recordatorio — Carlitos" %>
+<% content_for :title, t("resources.reminders.create_title") %>
 
 <%= render "shared/app_header" %>
 
 <main class="mx-auto max-w-3xl px-5 py-10 sm:px-6 lg:px-8">
-  <h1 class="text-4xl font-black text-ink">Nuevo recordatorio</h1>
+  <h1 class="text-4xl font-black text-ink"><%= t("resources.reminders.new") %></h1>
   <section class="mt-8 rounded-lg border border-line bg-white/80 p-6 shadow-card">
     <%= form_with model: @reminder, class: "space-y-5" do |form| %>
-      <%= form.text_field :title, placeholder: "Título", class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+      <%= form.text_field :title, placeholder: t("resources.reminders.title_placeholder"), class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
       <%= form.datetime_local_field :remind_at, class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-      <%= form.text_area :body, rows: 5, placeholder: "Detalles", class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
-      <%= form.submit "Crear recordatorio", class: "cursor-pointer rounded-full bg-ocean px-6 py-3 font-extrabold text-white" %>
+      <%= form.text_area :body, rows: 5, placeholder: t("resources.reminders.details_placeholder"), class: "w-full rounded-lg border border-line bg-cream px-4 py-3" %>
+      <%= form.submit t("resources.reminders.submit"), class: "cursor-pointer rounded-full bg-ocean px-6 py-3 font-extrabold text-white" %>
     <% end %>
   </section>
 </main>
