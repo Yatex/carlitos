@@ -17,6 +17,7 @@ module Admin
       @total_pages = (@total_count.to_f / PER_PAGE).ceil
       @users = scope.limit(PER_PAGE).offset((@page - 1) * PER_PAGE)
       @plans = Billing::PlanCatalog.all
+      @grantable_plans = Billing::PlanCatalog.paid
     end
 
     def extend_plan
@@ -30,16 +31,20 @@ module Admin
         redirect_to admin_users_path, alert: "Elegí un plan válido."
         return
       end
+      unless plan.paid?
+        redirect_to admin_users_path, alert: "El plan Free es una prueba automática de 14 días y no se extiende manualmente."
+        return
+      end
 
-      expires_at = plan.paid? ? parse_end_date(params[:plan_expires_on]) : nil
-      if plan.paid? && expires_at.blank?
+      expires_at = parse_end_date(params[:plan_expires_on])
+      if expires_at.blank?
         redirect_to admin_users_path, alert: "Elegí una fecha futura para extender el plan."
         return
       end
 
       @user.update!(
         current_plan: plan.key,
-        subscription_status: plan.paid? ? "active" : "free",
+        subscription_status: "active",
         plan_expires_at: expires_at,
         plan_granted_by: current_user,
         plan_granted_at: Time.current

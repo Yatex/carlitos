@@ -10,6 +10,14 @@
   </section>
 
   <section class="rounded-lg border border-line bg-white/80 p-6 shadow-soft sm:p-8">
+    <%= render "shared/google_auth_button", intent: "signup", label: "Crear cuenta con Google" %>
+
+    <div class="my-6 flex items-center gap-3 text-xs font-black uppercase text-muted">
+      <span class="h-px flex-1 bg-line"></span>
+      <span>o con email</span>
+      <span class="h-px flex-1 bg-line"></span>
+    </div>
+
     <%= form_with model: @user, url: signup_path, class: "space-y-5" do |form| %>
       <% if @user.errors.any? %>
         <div class="rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-800">

@@ -16,8 +16,15 @@
 
     <div class="rounded-lg border border-line bg-ink p-6 text-white shadow-soft">
       <p class="text-sm font-black uppercase text-sun">Suscripción</p>
-      <p class="mt-4 text-3xl font-black"><%= current_user.current_plan.titleize %></p>
+      <p class="mt-4 text-3xl font-black"><%= Billing::PlanCatalog.current_for(current_user).name %></p>
       <p class="mt-2 text-white/70">Estado: <%= current_user.subscription_status %></p>
+      <% if current_user.free_trial_active? %>
+        <p class="mt-2 text-sm text-white/70">Te quedan <%= current_user.trial_days_remaining %> días de prueba.</p>
+      <% elsif current_user.free_trial_expired? %>
+        <p class="mt-2 text-sm text-sun">Tu prueba gratis terminó.</p>
+      <% elsif current_user.plan_expires_at.present? %>
+        <p class="mt-2 text-sm text-white/70">Acceso hasta <%= l(current_user.plan_expires_at.to_date, format: :default) %>.</p>
+      <% end %>
       <%= link_to "Gestionar billing", billing_path, class: "mt-6 inline-flex rounded-full bg-white px-5 py-3 font-extrabold text-ink transition hover:bg-sun" %>
     </div>
   </section>

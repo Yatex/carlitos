@@ -32,10 +32,10 @@ module Billing
     PLANS = [
       Plan.new(
         key: "free",
-        name: "Free",
-        price: "$0",
-        description: "Para empezar a descargar pendientes sin configurar nada raro.",
-        badge: "Incluido",
+        name: "Free trial",
+        price: "14 días",
+        description: "Se activa automáticamente al crear tu cuenta para probar Carlitos sin fricción.",
+        badge: "Inicio automático",
         features: [
           "Recordatorios básicos",
           "Listas personales",
@@ -44,6 +44,7 @@ module Billing
           "Captura manual desde la web"
         ],
         limits: [
+          "Disponible solo durante los primeros 14 días",
           "Sin notas de voz",
           "Sin búsqueda avanzada",
           "Sin integraciones de calendario"

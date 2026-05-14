@@ -16,6 +16,8 @@
     <% [
       ["Usuarios totales", @stats[:total_users], "Todas las cuentas registradas"],
       ["Pagando planes", @stats[:paying_users], "Pro o Family activos"],
+      ["Trials activos", @stats[:active_free_trials], "Free automático de 14 días"],
+      ["Trials vencidos", @stats[:expired_free_trials], "Cuentas que ya terminaron la prueba"],
       ["Early access", @stats[:early_access_signups], "Personas esperando probar"],
       ["Admins", @stats[:admin_users], "Admin y super admin"]
     ].each do |label, value, hint| %>

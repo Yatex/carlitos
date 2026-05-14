@@ -8,6 +8,7 @@ This repo is Carlitos, a Rails SaaS app for an AI personal memory assistant.
 - Keep integration logic in services, not controllers.
 - Do not hardcode API keys, Stripe price IDs, webhook secrets, or Twilio credentials.
 - Reuse the existing service patterns for Resend, Stripe, Twilio, and Assistant actions.
+- Keep Google login in `Authentication::*` services and Google product integrations in `Integrations::*` services.
 - Billing tiers live in `Billing::PlanCatalog`; do not scatter plan feature lists across controllers.
 - Keep controllers thin; business decisions belong in models or services.
 - Admin-only product operations live under `Admin::*` controllers and require `current_user.admin_like?`.

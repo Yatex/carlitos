@@ -31,6 +31,10 @@ class CarlitosSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to dashboard_path
+    user = User.find_by!(email: "clara@example.com")
+    assert_equal "free", user.current_plan
+    assert_equal "trialing", user.subscription_status
+    assert user.free_trial_active?
   end
 
   test "user can log in" do

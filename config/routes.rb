@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy", as: :logout
 
+  get "auth/google", to: "google_auth#start", as: :google_auth
+  get "auth/google/callback", to: "google_auth#callback", as: :google_auth_callback
+
   resources :password_resets, only: [:new, :create], param: :token
   get "password_resets/:token/edit", to: "password_resets#edit", as: :edit_password_reset
   patch "password_resets/:token", to: "password_resets#update", as: :password_reset

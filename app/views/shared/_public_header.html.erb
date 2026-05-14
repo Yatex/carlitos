@@ -1,7 +1,7 @@
 <header class="sticky top-0 z-50 border-b border-line/80 bg-cream/90 backdrop-blur-xl">
   <nav class="mx-auto flex max-w-7xl items-center justify-between gap-5 px-5 py-4 sm:px-6 lg:px-8" aria-label="Principal">
     <%= link_to root_path, class: "flex items-center gap-3", aria: { label: "Inicio de Carlitos" } do %>
-      <span class="grid h-10 w-10 place-items-center rounded-lg bg-ink text-base font-black text-white shadow-card">C</span>
+      <%= image_tag "carlitos-mark.svg", alt: "Carlitos", class: "h-10 w-10 rounded-lg shadow-card" %>
       <span class="text-xl font-black text-ink">Carlitos</span>
     <% end %>
 

@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
   SUBSCRIPTION_STATUSES = %w[free trialing active past_due canceled incomplete].freeze
   PLANS = %w[free pro family].freeze
+  FREE_TRIAL_DAYS = 14
 
   enum role: { user: 0, admin: 1, super_admin: 2 }
 
@@ -19,6 +20,7 @@ class User < ApplicationRecord
 
   before_validation :normalize_email
   before_validation :set_defaults
+  before_validation :activate_initial_free_trial, on: :create
   before_validation :normalize_timezone
   after_create :ensure_daily_briefing
 
@@ -30,6 +32,7 @@ class User < ApplicationRecord
   validate :timezone_must_be_valid
   validates :subscription_status, inclusion: { in: SUBSCRIPTION_STATUSES }
   validates :current_plan, inclusion: { in: PLANS }
+  validates :google_uid, uniqueness: true, allow_blank: true
 
   def display_name
     name.presence || email.split("@").first
@@ -49,6 +52,23 @@ class User < ApplicationRecord
 
   def plan_expires_on
     plan_expires_at&.to_date
+  end
+
+  def free_trial_active?
+    current_plan == "free" && subscription_status == "trialing" && plan_access_active?
+  end
+
+  def free_trial_expired?
+    current_plan == "free" && free_trial_ends_at.present? && free_trial_ends_at.past?
+  end
+
+  def trial_days_remaining
+    return 0 unless free_trial_ends_at
+
+    seconds = free_trial_ends_at - Time.current
+    return 0 unless seconds.positive?
+
+    (seconds / 1.day).ceil
   end
 
   def prepare_password_reset!
@@ -71,6 +91,20 @@ class User < ApplicationRecord
     self.subscription_status = subscription_status.presence || "free"
     self.current_plan = current_plan.presence || "free"
     self.role = role.presence || "user"
+  end
+
+  def activate_initial_free_trial
+    return unless current_plan == "free"
+    return if free_trial_started_at.present?
+    return if plan_granted_by_id.present?
+    return unless subscription_status.in?(%w[free trialing])
+
+    trial_start = Time.current
+    trial_end = FREE_TRIAL_DAYS.days.from_now
+    self.subscription_status = "trialing"
+    self.free_trial_started_at = trial_start
+    self.free_trial_ends_at = trial_end
+    self.plan_expires_at = trial_end
   end
 
   def normalize_timezone

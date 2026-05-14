@@ -1,6 +1,13 @@
-<% flash.each do |type, message| %>
-  <% next if message.blank? %>
-  <div class="fixed left-1/2 top-4 z-[60] w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 rounded-lg border px-5 py-4 text-sm font-semibold shadow-card <%= type.to_s == "notice" ? "border-mint/30 bg-white text-ink" : "border-red-200 bg-red-50 text-red-800" %>">
-    <%= message %>
+<% if flash.any? %>
+  <div class="fixed left-1/2 top-4 z-[60] flex w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 flex-col gap-3">
+    <% flash.each do |type, message| %>
+      <% next if message.blank? %>
+      <div
+        class="rounded-lg border px-5 py-4 text-sm font-semibold shadow-card transition <%= type.to_s == "notice" ? "border-mint/30 bg-white text-ink" : "border-red-200 bg-red-50 text-red-800" %>"
+        data-controller="toast"
+        data-toast-delay-value="4500">
+        <%= message %>
+      </div>
+    <% end %>
   </div>
 <% end %>

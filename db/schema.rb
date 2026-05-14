@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_07_093000) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_13_103000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -135,7 +135,14 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_07_093000) do
     t.datetime "plan_expires_at"
     t.datetime "plan_granted_at"
     t.bigint "plan_granted_by_id"
+    t.string "google_uid"
+    t.datetime "google_connected_at"
+    t.boolean "google_email_verified", default: false, null: false
+    t.datetime "free_trial_started_at"
+    t.datetime "free_trial_ends_at"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["free_trial_ends_at"], name: "index_users_on_free_trial_ends_at"
+    t.index ["google_uid"], name: "index_users_on_google_uid", unique: true
     t.index ["password_reset_token"], name: "index_users_on_password_reset_token", unique: true
     t.index ["plan_expires_at"], name: "index_users_on_plan_expires_at"
     t.index ["plan_granted_by_id"], name: "index_users_on_plan_granted_by_id"

@@ -7,7 +7,7 @@
     <div>
       <p class="text-sm font-black uppercase text-ocean">Billing</p>
       <h1 class="mt-2 text-4xl font-black text-ink sm:text-5xl">Elegí cuánto querés que Carlitos recuerde por vos.</h1>
-      <p class="mt-5 max-w-2xl text-lg leading-8 text-muted">Arrancá gratis, pasá a Pro cuando Carlitos ya sea parte de tu día, y dejá listo Family / Team para coordinar memoria compartida más adelante.</p>
+      <p class="mt-5 max-w-2xl text-lg leading-8 text-muted">Tenés 14 días para probar Carlitos. Después podés pasar a Pro cuando ya sea parte de tu día, o dejar listo Family / Team para coordinar memoria compartida más adelante.</p>
     </div>
 
     <article class="rounded-lg border border-line bg-ink p-6 text-white shadow-soft">
@@ -16,6 +16,13 @@
           <p class="text-sm font-black uppercase text-sun">Plan actual</p>
           <p class="mt-3 text-4xl font-black"><%= @current_plan.name %></p>
           <p class="mt-2 text-sm text-white/70">Estado: <%= current_user.subscription_status %></p>
+          <% if current_user.free_trial_active? %>
+            <p class="mt-2 text-sm text-white/70">Trial activo: <%= current_user.trial_days_remaining %> días restantes.</p>
+          <% elsif current_user.free_trial_expired? %>
+            <p class="mt-2 text-sm text-sun">Tu trial gratis terminó.</p>
+          <% elsif current_user.plan_expires_at.present? %>
+            <p class="mt-2 text-sm text-white/70">Acceso hasta <%= l(current_user.plan_expires_at.to_date, format: :default) %>.</p>
+          <% end %>
         </div>
         <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-extrabold"><%= @current_plan.price %></span>
       </div>
@@ -66,7 +73,9 @@
         <% end %>
 
         <div class="mt-auto pt-7">
-          <% if current %>
+          <% if current && current_user.free_trial_expired? %>
+            <span class="inline-flex w-full justify-center rounded-full border border-sun/40 bg-sun/20 px-5 py-3 font-extrabold text-ink">Trial vencido</span>
+          <% elsif current %>
             <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-ink">Tu plan actual</span>
           <% elsif plan.configured_for_checkout? %>
             <%= button_to "Elegir #{plan.name}", stripe_checkout_path(plan: plan.key), method: :post, class: "w-full rounded-full bg-ocean px-5 py-3 font-extrabold text-white shadow-card transition hover:bg-ink" %>
@@ -74,6 +83,8 @@
             <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 text-center font-extrabold text-muted"><%= plan.stripe_price_env %> pendiente</span>
           <% elsif plan.coming_soon %>
             <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-muted">Unirme a la lista</span>
+          <% elsif plan.key == "free" %>
+            <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-muted">Trial inicial</span>
           <% else %>
             <span class="inline-flex w-full justify-center rounded-full border border-line bg-cream px-5 py-3 font-extrabold text-ink">Incluido</span>
           <% end %>
@@ -87,7 +98,7 @@
     <div class="mt-5 grid gap-4 md:grid-cols-3">
       <div class="rounded-lg bg-cream p-4">
         <p class="font-black text-ink">Free</p>
-        <p class="mt-2 text-sm leading-6 text-muted">Sirve para probar captura rápida, listas simples y recordatorios puntuales.</p>
+        <p class="mt-2 text-sm leading-6 text-muted">Es una prueba automática de 14 días para probar captura rápida, listas simples y recordatorios puntuales.</p>
       </div>
       <div class="rounded-lg bg-ocean/10 p-4">
         <p class="font-black text-ink">Pro</p>

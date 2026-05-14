@@ -57,6 +57,8 @@ Optional integrations:
 - `TWILIO_WEBHOOK_AUTH_TOKEN`
 - `GOOGLE_CLIENT_ID`
 - `GOOGLE_CLIENT_SECRET`
+- `GOOGLE_AUTH_REDIRECT_URI`
+- `GOOGLE_AUTH_SCOPES`
 - `GOOGLE_OAUTH_REDIRECT_URI`
 - `AI_PROVIDER`
 - `CARLITOS_AI_SERVICE_URL`
@@ -102,6 +104,33 @@ Admin login:
 
 The admin seed is a `super_admin`, so it can access `/admin/users` and `/admin/analytics`.
 
+## Google Login
+
+Carlitos supports Google login/sign up without OmniAuth. It uses the same Google OAuth client as the Gmail/Calendar integration unless you choose to create a separate Google client.
+
+Set:
+
+```sh
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_AUTH_REDIRECT_URI=
+GOOGLE_AUTH_SCOPES=
+```
+
+Default auth scopes are:
+
+```text
+openid email profile
+```
+
+If `GOOGLE_AUTH_REDIRECT_URI` is empty, Carlitos uses:
+
+```text
+/auth/google/callback
+```
+
+Google accounts are matched by `google_uid` first and email second. New Google signups receive a secure generated password so they can later set/reset a password if needed.
+
 ## Admin
 
 Carlitos has three roles:
@@ -114,6 +143,18 @@ Admin sections:
 
 - `/admin/users`: filter users, review role/plan/activity, extend plans manually, and update roles as super admin.
 - `/admin/analytics`: platform-level metrics such as total users, paying users, early-access signups, active briefings, integrations, and content/activity counts.
+
+## Plans and Trials
+
+The Free plan is not permanent access. New accounts automatically receive a 14-day Free trial on first signup, whether they register with email/password or Google.
+
+Trial fields on `User`:
+
+- `free_trial_started_at`
+- `free_trial_ends_at`
+- `plan_expires_at`
+
+Admins can manually extend paid plans such as Pro or Family/Team from `/admin/users`. Free trial access is only activated automatically when the account is first created.
 
 ## Settings Integrations
 
@@ -130,6 +171,8 @@ Google OAuth uses:
 ```sh
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+GOOGLE_AUTH_REDIRECT_URI=
+GOOGLE_AUTH_SCOPES=
 GOOGLE_OAUTH_REDIRECT_URI=
 GOOGLE_GMAIL_SCOPES=
 GOOGLE_CALENDAR_SCOPES=
