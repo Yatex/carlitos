@@ -38,4 +38,56 @@ class IntegrationServicesTest < ActiveSupport::TestCase
       assert result.success?
     end
   end
+
+  test "assistant fallback can decide to search Gmail" do
+    user = users(:one)
+    decision = Assistant::DecisionService.new(provider: nil, service_url: nil).call(
+      user: user,
+      input: "revisá mis mails sobre factura de Stripe",
+      channel: "whatsapp"
+    )
+
+    assert_equal "search_gmail", decision.action
+    assert_equal "factura de Stripe", decision.arguments["query"]
+
+    result = Assistant::ActionDispatcher.new(user: user, decision: decision).call
+    assert_not result.success?
+    assert_match "Gmail", result.message
+  end
+
+  test "assistant fallback can decide to create a calendar event" do
+    user = users(:one)
+    decision = Assistant::DecisionService.new(provider: nil, service_url: nil).call(
+      user: user,
+      input: "agendá reunión con Juan mañana a las 15",
+      channel: "whatsapp"
+    )
+
+    assert_equal "create_calendar_event", decision.action
+    assert_equal "Reunión con Juan", decision.arguments["title"]
+    assert decision.arguments["starts_at"].present?
+  end
+
+  test "google token store encrypts and reads tokens" do
+    user = users(:one)
+    metadata = Integrations::GoogleTokenStore.metadata_from_token_response(
+      "gmail",
+      {
+        "access_token" => "access-test",
+        "refresh_token" => "refresh-test",
+        "expires_in" => 3600,
+        "scope" => "https://www.googleapis.com/auth/gmail.readonly",
+        "token_type" => "Bearer"
+      }
+    )
+    connection = user.integration_connections.create!(
+      provider: "gmail",
+      status: "connected",
+      metadata: metadata
+    )
+
+    refute_includes metadata["tokens"], "access-test"
+    assert_equal "access-test", Integrations::GoogleTokenStore.access_token(connection)
+    assert_equal "refresh-test", Integrations::GoogleTokenStore.refresh_token(connection)
+  end
 end

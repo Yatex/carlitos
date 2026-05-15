@@ -157,15 +157,43 @@ es:
       search_memory:
         found: "Encontré esto: %{titles}."
         not_found: "No encontré nada con esa búsqueda todavía."
+      search_gmail:
+        found: "Encontré estos mails: %{emails}."
+        not_found: "No encontré mails con esa búsqueda."
+        connect_gmail: "Para buscar en Gmail, primero conectá Gmail desde Ajustes."
+        failed: "No pude buscar en Gmail: %{error}"
+      send_email:
+        default_subject: "Mensaje de Carlitos"
+        missing_fields: "Necesito un destinatario válido y el contenido del mail."
+        sent: "Listo. Envié el mail a %{email}."
+        connect_gmail: "Para enviar mails, primero conectá Gmail desde Ajustes."
+        failed: "No pude enviar el mail: %{error}"
+      create_calendar_event:
+        missing_fields: "Necesito un título y una fecha para crear el evento."
+        created: "Listo. Creé el evento %{title} en tu calendario."
+        connect_calendar: "Para crear eventos, primero conectá Google Calendar desde Ajustes."
+        failed: "No pude crear el evento: %{error}"
   whatsapp:
     inbound:
       unlinked: "Hola, soy Carlitos. Todavía necesito vincular este WhatsApp con tu cuenta."
       failed: "Tuve un problema procesando ese mensaje. Probá de nuevo en unos minutos."
+      empty: "Mandame texto o una nota de voz y lo ordeno por vos."
+      empty_placeholder: "Mensaje vacío"
+      audio_placeholder: "Audio recibido sin transcripción"
+      audio_unavailable: "Recibí tu audio, pero todavía no pude transcribirlo. Probá con texto o revisá la configuración de audio."
     connector:
       missing_phone: "Ingresá un número de WhatsApp."
       setup_message: "Hola, soy Carlitos. Ya podés responder este mensaje para vincular WhatsApp con tu memoria."
       sent: "Te mandamos un WhatsApp para terminar la conexión."
       saved_pending: "Guardamos tu número. Cuando Twilio esté configurado, Carlitos podrá completar la conexión."
+  audio_transcription:
+    errors:
+      not_configured: "La transcripción de audio no está configurada."
+      download_failed: "No pudimos descargar el audio de WhatsApp."
+      too_large: "El audio es demasiado grande para transcribirlo."
+      response: "El servicio de transcripción respondió %{code}."
+      blank: "La transcripción quedó vacía."
+      invalid_response: "El servicio de transcripción devolvió una respuesta inválida."
   stripe:
     errors:
       unknown_plan: "Ese plan no existe."

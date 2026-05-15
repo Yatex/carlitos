@@ -1,2 +1,3 @@
 web: bin/rails server
 css: bin/rails tailwindcss:watch
+ai: CARLITOS_AI_PORT=${CARLITOS_AI_PORT:-8787} npm --prefix ai-decision-service run dev

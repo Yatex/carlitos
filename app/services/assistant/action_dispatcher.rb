@@ -6,7 +6,10 @@ module Assistant
       "add_list_item" => "Assistant::Actions::AddListItem",
       "save_memory_note" => "Assistant::Actions::SaveMemoryNote",
       "schedule_daily_briefing" => "Assistant::Actions::ScheduleDailyBriefing",
-      "search_memory" => "Assistant::Actions::SearchMemory"
+      "search_memory" => "Assistant::Actions::SearchMemory",
+      "search_gmail" => "Assistant::Actions::SearchGmail",
+      "send_email" => "Assistant::Actions::SendEmail",
+      "create_calendar_event" => "Assistant::Actions::CreateCalendarEvent"
     }.freeze
 
     def initialize(user:, decision:)

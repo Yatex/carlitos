@@ -16,6 +16,11 @@ const WEEKDAYS: Record<string, number> = {
 export function maybeResolveLocalDecision(request: DecideRequest): Decision | null {
   const normalized = request.input.trim();
 
+  const googleDecision = maybeResolveGoogleDecision(normalized);
+  if (googleDecision) {
+    return googleDecision;
+  }
+
   const reminderMatch = normalized.match(/^record[aá]me\s+(.+?)(?:\s+(hoy|mañana|pasado mañana|lunes|martes|miércoles|miercoles|jueves|viernes|sábado|sabado|domingo))?(?:\s+a\s+las\s+(\d{1,2})(?::(\d{2}))?)?$/i);
   if (reminderMatch) {
     return {
@@ -89,6 +94,61 @@ export function maybeResolveLocalDecision(request: DecideRequest): Decision | nu
   return null;
 }
 
+function maybeResolveGoogleDecision(normalized: string): Decision | null {
+  const sendEmailMatch = normalized.match(/(?:mand[aá]|envi[aá])\s+(?:un\s+)?(?:mail|email|correo)\s+a\s+([\w.+-]+@[\w.-]+\.\w+)\s+(?:que\s+diga|diciendo|mensaje|con\s+el\s+texto)\s+(.+)/i);
+  if (sendEmailMatch) {
+    return {
+      action: "send_email",
+      arguments: {
+        to: sendEmailMatch[1].trim(),
+        body: sendEmailMatch[2].trim()
+      },
+      confidence: 0.74,
+      reply: null,
+      reasoning_summary: "Comando local para enviar un correo desde Gmail."
+    };
+  }
+
+  const gmailSearchMatch = normalized.match(/(?:busc[aá]|le[eé]|revis[aá]|mir[aá]|mostrame|ver)\s+(?:mis\s+)?(?:mails|emails|correos|gmail)(?:\s+(?:sobre|de|con|por)\s+(.+))?/i);
+  if (gmailSearchMatch) {
+    return {
+      action: "search_gmail",
+      arguments: { query: gmailQuery(gmailSearchMatch[1]) },
+      confidence: 0.72,
+      reply: null,
+      reasoning_summary: "Comando local para buscar en Gmail."
+    };
+  }
+
+  const contextualGmailSearchMatch = normalized.match(/\b(?:gmail|mails|emails|correos)\b.*(?:sobre|de|con|por)\s+(.+)/i);
+  if (contextualGmailSearchMatch) {
+    return {
+      action: "search_gmail",
+      arguments: { query: gmailQuery(contextualGmailSearchMatch[1]) },
+      confidence: 0.62,
+      reply: null,
+      reasoning_summary: "Comando local contextual para buscar en Gmail."
+    };
+  }
+
+  const calendarMatch = normalized.match(/^(?:cre[aá]|agend[aá]|arm[aá])\s+(?:un\s+)?(?<kind>evento|reuni[oó]n|turno)(?:\s+(?<rest>.+))?$/i);
+  if (calendarMatch?.groups) {
+    const schedule = extractSpanishSchedule(calendarMatch.groups.rest || "");
+    return {
+      action: "create_calendar_event",
+      arguments: {
+        title: calendarTitle(calendarMatch.groups.kind, schedule.title),
+        ...compact({ starts_at: schedule.startsAt })
+      },
+      confidence: schedule.startsAt ? 0.72 : 0.54,
+      reply: null,
+      reasoning_summary: "Comando local para crear un evento de calendario."
+    };
+  }
+
+  return null;
+}
+
 export function fallbackMemoryDecision(request: DecideRequest): Decision {
   return {
     action: "save_memory_note",
@@ -126,6 +186,34 @@ function parseSpanishDate(dayText?: string, hourText?: string, minuteText?: stri
 
   date.setHours(Number(hourText || 9), Number(minuteText || 0), 0, 0);
   return date.toISOString();
+}
+
+function extractSpanishSchedule(text: string): { title: string; startsAt?: string } {
+  const dayMatch = text.match(/\b(hoy|mañana|pasado mañana|lunes|martes|miércoles|miercoles|jueves|viernes|sábado|sabado|domingo)\b/i);
+  const hourMatch = text.match(/a\s+las\s+(\d{1,2})(?::(\d{2}))?/i);
+  const title = text
+    .replace(/\b(hoy|mañana|pasado mañana|lunes|martes|miércoles|miercoles|jueves|viernes|sábado|sabado|domingo)\b/gi, "")
+    .replace(/a\s+las\s+\d{1,2}(?::\d{2})?/gi, "")
+    .trim()
+    .replace(/\s+/g, " ");
+
+  return {
+    title,
+    startsAt: dayMatch || hourMatch ? parseSpanishDate(dayMatch?.[1], hourMatch?.[1], hourMatch?.[2]) : undefined
+  };
+}
+
+function gmailQuery(value?: string): string {
+  return value?.trim().replace(/\s+/g, " ") || "newer_than:7d";
+}
+
+function calendarTitle(kind: string, detail: string): string {
+  const base = /reuni/i.test(kind) ? "Reunión" : capitalize(kind);
+  return detail ? `${base} ${detail}` : base;
+}
+
+function capitalize(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 }
 
 function compact(values: Record<string, string | undefined>): Record<string, string> {

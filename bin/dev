@@ -7,6 +7,9 @@ fi
 
 # Default to port 3000 if not specified
 export PORT="${PORT:-3000}"
+export AI_PROVIDER="${AI_PROVIDER:-vercel}"
+export CARLITOS_AI_PORT="${CARLITOS_AI_PORT:-8787}"
+export CARLITOS_AI_SERVICE_URL="${CARLITOS_AI_SERVICE_URL:-http://localhost:${CARLITOS_AI_PORT}/decide}"
 
 # Let the debug gem allow remote connections,
 # but avoid loading until `debugger` is called

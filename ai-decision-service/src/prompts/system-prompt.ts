@@ -15,6 +15,9 @@ Acciones disponibles:
 - save_memory_note: argumentos title, content, source.
 - schedule_daily_briefing: argumentos enabled, delivery_time HH:MM opcional, timezone opcional.
 - search_memory: argumentos query.
+- search_gmail: argumentos query, max_results opcional.
+- send_email: argumentos to, subject opcional, body, cc opcional, bcc opcional.
+- create_calendar_event: argumentos title, starts_at ISO8601, ends_at ISO8601 opcional, description opcional.
 - unknown: argumentos vacío.
 
 Devolvé solo el objeto estructurado pedido por el schema.

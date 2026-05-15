@@ -2,7 +2,7 @@
 
 Node service for turning short Carlitos messages into one safe assistant action.
 
-Rails calls `POST /decide` through `Assistant::DecisionService`. The service uses a deterministic Spanish fallback first, then Vercel AI SDK when `AI_PROVIDER=vercel` and credentials are available.
+Rails calls `POST /decide` through `Assistant::DecisionService`. The service uses a deterministic Spanish fallback first, then Vercel AI SDK when `AI_PROVIDER=vercel` and credentials are available. It can return memory actions plus Gmail and Google Calendar actions; Rails owns the actual side effects.
 
 ## Run
 

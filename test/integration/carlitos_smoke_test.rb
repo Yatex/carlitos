@@ -90,6 +90,23 @@ class CarlitosSmokeTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :success
+    assert_equal "application/xml", response.media_type
+    assert_includes response.body, "<Response>"
+    assert_includes response.body, "<Message>"
     assert_includes response.body, "vincular"
+  end
+
+  test "whatsapp webhook accepts token from query params" do
+    old_token = ENV["TWILIO_WEBHOOK_AUTH_TOKEN"]
+    ENV["TWILIO_WEBHOOK_AUTH_TOKEN"] = "secret-token"
+
+    post whatsapp_inbound_path(webhook_token: "secret-token"), params: {
+      "From" => "whatsapp:+59899999999",
+      "Body" => "hola"
+    }
+
+    assert_response :success
+  ensure
+    ENV["TWILIO_WEBHOOK_AUTH_TOKEN"] = old_token
   end
 end

@@ -76,14 +76,7 @@ module Integrations
     end
 
     def self.metadata_from_token_response(provider, token_response)
-      {
-        provider: provider,
-        scopes: token_response["scope"].to_s.split(/\s+/),
-        token_type: token_response["token_type"],
-        expires_at: token_response["expires_in"].present? ? token_response["expires_in"].to_i.seconds.from_now.iso8601 : nil,
-        token_received_at: Time.current.iso8601,
-        token_storage: "not_persisted_yet"
-      }.compact
+      Integrations::GoogleTokenStore.metadata_from_token_response(provider, token_response)
     end
 
     private

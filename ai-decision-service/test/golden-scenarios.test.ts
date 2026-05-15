@@ -39,3 +39,26 @@ test("saves personal context", async () => {
   assert.equal(decision.action, "save_memory_note");
   assert.match(String(decision.arguments.content), /DNI/);
 });
+
+test("searches Gmail from a Spanish mail command", async () => {
+  const decision = await service.decide({
+    input: "revisá mis mails sobre factura de Stripe",
+    channel: "whatsapp",
+    user: { id: 1, timezone: "America/Montevideo" }
+  });
+
+  assert.equal(decision.action, "search_gmail");
+  assert.equal(decision.arguments.query, "factura de Stripe");
+});
+
+test("creates a calendar event from a Spanish scheduling command", async () => {
+  const decision = await service.decide({
+    input: "agendá reunión con Juan mañana a las 15",
+    channel: "whatsapp",
+    user: { id: 1, timezone: "America/Montevideo" }
+  });
+
+  assert.equal(decision.action, "create_calendar_event");
+  assert.equal(decision.arguments.title, "Reunión con Juan");
+  assert.match(String(decision.arguments.starts_at), /T/);
+});

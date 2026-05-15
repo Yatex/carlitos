@@ -6,7 +6,7 @@ module Whatsapp
       return head :unauthorized unless webhook_authorized?
 
       result = WhatsappInboundProcessor.new(params.to_unsafe_h).process
-      render plain: result[:response], content_type: "text/plain"
+      render xml: twiml_message(result[:response])
     end
 
     private
@@ -15,7 +15,14 @@ module Whatsapp
       expected = ENV["TWILIO_WEBHOOK_AUTH_TOKEN"].presence
       return true unless expected
 
-      ActiveSupport::SecurityUtils.secure_compare(expected, request.headers["X-Carlitos-Webhook-Token"].to_s)
+      provided = request.headers["X-Carlitos-Webhook-Token"].presence || params[:webhook_token].to_s
+      provided.present? &&
+        provided.bytesize == expected.bytesize &&
+        ActiveSupport::SecurityUtils.secure_compare(expected, provided)
+    end
+
+    def twiml_message(body)
+      "<Response><Message>#{ERB::Util.html_escape(body)}</Message></Response>"
     end
   end
 end

@@ -14,7 +14,11 @@ class TwilioClient
   end
 
   def configured?
-    @account_sid.present? && @auth_token.present? && @whatsapp_from.present?
+    credentials_configured? && @whatsapp_from.present?
+  end
+
+  def credentials_configured?
+    @account_sid.present? && @auth_token.present?
   end
 
   def send_whatsapp(to:, body:)
@@ -36,6 +40,28 @@ class TwilioClient
     { ok: response.is_a?(Net::HTTPSuccess), status: response.code.to_i, body: response.body }
   rescue StandardError => e
     Rails.logger.warn("[Twilio] WhatsApp delivery failed: #{e.class} #{e.message}")
+    { ok: false, error: e.message }
+  end
+
+  def download_media(url)
+    unless credentials_configured?
+      Rails.logger.warn("[Twilio] Credentials missing; skipped media download.")
+      return { ok: false, error: "Twilio is not configured" }
+    end
+
+    uri = URI(url)
+    request = Net::HTTP::Get.new(uri)
+    request.basic_auth(@account_sid, @auth_token)
+
+    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == "https") { |http| http.request(request) }
+    {
+      ok: response.is_a?(Net::HTTPSuccess),
+      status: response.code.to_i,
+      body: response.body,
+      content_type: response["Content-Type"]
+    }
+  rescue StandardError => e
+    Rails.logger.warn("[Twilio] Media download failed: #{e.class} #{e.message}")
     { ok: false, error: e.message }
   end
 

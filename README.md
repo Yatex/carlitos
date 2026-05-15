@@ -60,6 +60,8 @@ Optional integrations:
 - `GOOGLE_AUTH_REDIRECT_URI`
 - `GOOGLE_AUTH_SCOPES`
 - `GOOGLE_OAUTH_REDIRECT_URI`
+- `GOOGLE_GMAIL_SCOPES`
+- `GOOGLE_CALENDAR_SCOPES`
 - `AI_PROVIDER`
 - `CARLITOS_AI_SERVICE_URL`
 - `CARLITOS_AI_SERVICE_TOKEN`
@@ -67,9 +69,12 @@ Optional integrations:
 - `CARLITOS_AI_MODEL_PROVIDER`
 - `CARLITOS_AI_MODEL`
 - `OPENAI_API_KEY`
+- `OPENAI_TRANSCRIPTION_MODEL`
+- `OPENAI_TRANSCRIPTION_LANGUAGE`
+- `OPENAI_TRANSCRIPTION_MAX_BYTES`
 - `VERCEL_AI_GATEWAY_API_KEY`
 
-Missing Resend, Stripe, Twilio, or AI credentials are handled gracefully in development. The app logs a clear warning and skips the external call.
+Missing Resend, Stripe, Twilio, Google, transcription, or AI credentials are handled gracefully in development. The app logs a clear warning and skips the external call.
 
 ## Database
 
@@ -190,7 +195,7 @@ If `GOOGLE_OAUTH_REDIRECT_URI` is empty, Carlitos uses the Rails callback URL:
 /integrations/google/callback
 ```
 
-For now, Google OAuth records connection status and granted scopes, but does not persist OAuth access or refresh tokens. Add encrypted token storage before reading Gmail or Calendar data in production.
+Google OAuth stores access and refresh tokens encrypted inside integration metadata. Assistant actions can now search Gmail, send Gmail messages, and create Google Calendar events when the user has connected the relevant integration and granted the configured scopes.
 
 ## Resend
 
@@ -248,6 +253,19 @@ POST /whatsapp/inbound
 
 If `TWILIO_WEBHOOK_AUTH_TOKEN` is set, include the same value in the `X-Carlitos-Webhook-Token` header.
 
+Voice notes are supported through the same webhook. Twilio sends `MediaUrl0` and `MediaContentType0`; Carlitos downloads audio media with Twilio credentials, transcribes it through OpenAI, then sends the transcript into the assistant pipeline.
+
+Optional transcription env vars:
+
+```sh
+OPENAI_API_KEY=
+OPENAI_TRANSCRIPTION_MODEL=gpt-4o-mini-transcribe
+OPENAI_TRANSCRIPTION_LANGUAGE=es
+OPENAI_TRANSCRIPTION_MAX_BYTES=26214400
+```
+
+If `OPENAI_API_KEY` is missing, text WhatsApp messages still work and voice notes receive a helpful fallback reply.
+
 ## AI Service
 
 Carlitos can already understand a small set of Spanish commands through the Rails fallback parser. For fuller AI behavior, run the Node decision service in `ai-decision-service`, which uses the Vercel AI SDK and keeps a deterministic local fallback so development does not depend on credentials.
@@ -260,13 +278,21 @@ CARLITOS_AI_SERVICE_URL=http://localhost:8787/decide
 CARLITOS_AI_SERVICE_TOKEN=
 ```
 
-Run the service:
+Run the service by itself:
 
 ```sh
 cd ai-decision-service
 npm install
 npm run dev
 ```
+
+Or run Rails, Tailwind, and the AI decision service together:
+
+```sh
+bin/dev
+```
+
+`bin/dev` defaults Rails to `AI_PROVIDER=vercel` and `CARLITOS_AI_SERVICE_URL=http://localhost:8787/decide`, while the Node service itself stays in safe local mode unless provider credentials are present.
 
 Service env vars:
 
@@ -285,8 +311,11 @@ When no provider/service URL is configured, `Assistant::DecisionService` uses a 
 - `recordame pagar el alquiler mañana a las 10`
 - `agregá leche a la lista del súper`
 - `guardá que mi DNI vence en agosto`
+- `revisá mis mails sobre factura de Stripe`
+- `mandá un mail a ana@example.com que diga llego diez minutos tarde`
+- `agendá reunión con Juan mañana a las 15`
 
-The service contract is `POST /decide` with `input`, `channel`, and `user.timezone`; it returns one action such as `create_reminder`, `add_list_item`, `save_memory_note`, `schedule_daily_briefing`, or `search_memory`.
+The service contract is `POST /decide` with `input`, `channel`, and `user.timezone`; it returns one action such as `create_reminder`, `add_list_item`, `save_memory_note`, `schedule_daily_briefing`, `search_memory`, `search_gmail`, `send_email`, or `create_calendar_event`.
 
 ## Tests
 
@@ -295,7 +324,7 @@ bin/rails test
 npm --prefix ai-decision-service test
 ```
 
-The smoke suite covers the landing page, early access, auth, dashboard protection, billing plan display, reminders, memory notes, Stripe webhook presence, WhatsApp webhook presence, Resend safe initialization, and assistant fallback actions.
+The smoke suite covers the landing page, early access, auth, dashboard protection, billing plan display, reminders, memory notes, Stripe webhook presence, WhatsApp webhook presence, voice note fallback/transcript routing, Resend safe initialization, Google token storage, and assistant fallback actions.
 
 ## Render Notes
 

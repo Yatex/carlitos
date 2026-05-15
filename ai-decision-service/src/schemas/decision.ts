@@ -7,6 +7,9 @@ export const decisionActionValues = [
   "save_memory_note",
   "schedule_daily_briefing",
   "search_memory",
+  "search_gmail",
+  "send_email",
+  "create_calendar_event",
   "unknown"
 ] as const;
 
